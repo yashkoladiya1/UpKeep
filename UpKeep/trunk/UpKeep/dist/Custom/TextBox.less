@@ -1,0 +1,13 @@
+﻿ @input-success: rgba(0, 32, 132, 0.8);
+@input-underline-color: rgba(123, 321, 312, 0.8);
+.form-group.is-focused {
+  .form-control {
+    background-image: linear-gradient(@input-success, @input-success), linear-gradient(@input-underline-color, @input-underline-color);
+  }
+}
+
+.form-group.is-focused {
+  .control-label {
+    color: @input-success !important;
+  }
+}

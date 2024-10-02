@@ -1,0 +1,844 @@
+﻿
+@{
+    ViewBag.Title = "AdminDashBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.material.min.css">
+<script src="https://www.chartjs.org/dist/2.8.0/Chart.min.js"></script>
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Task Assigned Hours</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="gridboxmap2" class="box-body table-responsive no-padding">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Task Working Hours</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="gridboxmap3" class="box-body table-responsive no-padding">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Projects</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <div class="box-body">
+                    <div class="form-group" id="graph_container_Ageing">
+                        <canvas id="canvas_Ageing"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Tasks List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    @*<div style="width:90%; margin:0 auto;">*@
+                    <input id="txtSearch" placeholder="General search" class="form-control" />
+                    <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                    </div>
+                    @*</div>*@
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+    </div>
+</section>
+<input type="hidden" id="hdnTotalTask" value="@ViewBag.TotalTaskList" />
+<input type="hidden" id="hdnCompletedTask" value="@ViewBag.CompletedTaskList" />
+<!-- jQuery 3 -->
+@*<script src="~/bower_components/jquery/dist/jquery.min.js"></script>*@
+<!-- ChartJS -->
+@*<script src="~/bower_components/chart.js/Chart.js"></script>*@
+
+<script type="text/javascript">
+    //$('[data-toggle="tooltip"]').tooltip();
+    $(document).ready(function () {
+        show_loader();
+        display();
+        displayGraph();
+        displayGraph1();
+        getProjectCount();
+        hide_loader();
+        //GetDataUser();
+        //$("body").tooltip({ selector: '[data-toggle=tooltip]' });
+
+        //$('#ddl_Status').select2({
+        //    dropdownParent: $('#modal-default')
+        //});
+        //var bootstrapTooltip = $.fn.tooltip.noConflict();
+        //$.fn.bstooltip = bootstrapTooltip;
+        //$('#myTest').bstooltip();
+    });
+    //GetUserTaskAssignedHours
+
+    function getProjectCount() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetProjectTaskCount", "Home")',
+            async: false,
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            contentType: "application/json",
+            dataType: "json",
+            success: function (chData) {
+                var aData = chData;
+                var aLabels = aData[0];
+                var aDatasets1 = aData[1];
+                var aDatasets2 = aData[2];
+
+                //For Bar Chart
+                var ctx = document.getElementById("canvas_Ageing").getContext('2d');
+                ctx.height = 900;
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    height: "230px",
+                    width: "300px",
+                    autoSkip: false,
+                    responsive: true,
+                    animation: true,
+                    showDatapoints: true,
+                    legend: { position: 'bottom' },
+                    data: {
+                        //labels: ["M", "T", "W", "T", "F", "S", "S"],
+                        labels: aLabels,
+                        datasets: [{
+                            label: 'Total Task',
+                            data: aDatasets1,
+                            backgroundColor: ["#5899da", "#e8743b", "#19a979", "#ed4a7b", "#945ecf", "#13a4b4", "#525df4", "#bf399e", "#6c8893","#ee6868"]
+                        }, {
+                            label: 'Completed Task',
+                            data: aDatasets2,
+                            backgroundColor: ["#5899da", "#e8743b", "#19a979", "#ed4a7b", "#945ecf", "#13a4b4", "#525df4", "#bf399e", "#6c8893", "#ee6868"]
+                        }]
+                    }, options: {
+                        events: ['click'],
+                        scaleShowValues: true,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    autoSkip: false
+                                }
+                            }]
+                        }
+                    }
+                });
+                //var barChartData = {
+                //    labels: [datas.ModuleList[0], datas.ModuleList[1]],
+                //    datasets: [{
+                //        label: 'Dataset 1',
+                //        backgroundColor: '#5899da',
+                //        //borderColor: window.chartColors.red,
+                //        borderWidth: 5,
+                //        data: [ 80 , 16 ]
+                //    }, {
+                //        label: 'Dataset 2',
+                //        backgroundColor: '#e8743b',
+                //        //borderColor: window.chartColors.blue,
+                //        borderWidth: 5,
+                //        data: [15, 90]
+                //    }]
+
+                //};
+
+                ////window.onload = function () {
+                ////alert(datas.CompletedTask);
+                //$('#canvas_Ageing').remove(); // this is my <canvas> element
+                //$('#graph_container_Ageing').append('<canvas id="canvas_Ageing"><canvas>');
+                //var ctx = document.getElementById('canvas_Ageing').getContext('2d');
+                //ctx.height = 900;
+                //var myBar = new Chart(ctx, {
+                //    type: 'bar',
+                //    data: barChartData,
+                //    options: {
+                //        responsive: true,
+                //        legend: {
+                //            position: 'top',
+                //        },
+                //        title: {
+                //            display: true,
+                //            text: 'Chart.js Bar Chart'
+                //        }
+                //    }
+                //});
+
+
+                //myBar.update();
+                //};
+
+                //var barChartData = {
+                //    labels: data.ModuleList,
+                //    datasets: [{
+                //        label: 'Total Task',
+                //        backgroundColor: '#5899da',
+                //        borderWidth: 5,
+                //        data: data.TotalTask
+                //    }, {
+                //        label: 'Completed Task',
+                //        backgroundColor: '#e8743b',
+                //        borderWidth: 5,
+                //        data: data.CompletedTask
+                //    }]
+                //};
+                //var barChartCanvas = $('#canvas_Ageing').get(0).getContext('2d')
+                //var barChart = new Chart(barChartCanvas)
+                ////var barChartData = areaChartData
+                //barChartData.datasets[1].fillColor = '#00a65a'
+                //barChartData.datasets[1].strokeColor = '#00a65a'
+                //barChartData.datasets[1].pointColor = '#00a65a'
+                //var barChartOptions = {
+                //    ////Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+                //    //scaleBeginAtZero: true,
+                //    ////Boolean - Whether grid lines are shown across the chart
+                //    //scaleShowGridLines: true,
+                //    ////String - Colour of the grid lines
+                //    //scaleGridLineColor: 'rgba(0,0,0,.05)',
+                //    ////Number - Width of the grid lines
+                //    //scaleGridLineWidth: 1,
+                //    ////Boolean - Whether to show horizontal lines (except X axis)
+                //    //scaleShowHorizontalLines: true,
+                //    ////Boolean - Whether to show vertical lines (except Y axis)
+                //    //scaleShowVerticalLines: true,
+                //    ////Boolean - If there is a stroke on each bar
+                //    //barShowStroke: true,
+                //    ////Number - Pixel width of the bar stroke
+                //    //barStrokeWidth: 2,
+                //    ////Number - Spacing between each of the X value sets
+                //    //barValueSpacing: 5,
+                //    ////Number - Spacing between data sets within X values
+                //    //barDatasetSpacing: 1,
+                //    ////String - A legend template
+                //    //legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+                //    ////Boolean - whether to make the chart responsive
+                //    responsive: true,
+                //    maintainAspectRatio: true
+                //}
+
+                //barChartOptions.datasetFill = false
+                //barChart.Bar(barChartData, barChartOptions)
+
+
+                //alert(data.TotalTask);
+                //alert(data.CompletedTask);
+                ////var TotalTask = '10,15';
+                ////var CompletedTask = '5,5';
+                ////alert(TotalTask);
+                //var barChartData = {
+                //    labels: data.ModuleList,
+                //    datasets: [{
+                //        label: 'Total Task',
+                //        backgroundColor: '#5899da',
+                //        data: data.TotalTask
+                //    }, {
+                //        label: 'Completed Task',
+                //        backgroundColor: '#e8743b',
+                //        data: data.CompletedTask
+                //    }]
+                //};
+                //$('#canvas_Ageing').remove(); // this is my <canvas> element
+                //$('#graph_container_Ageing').append('<canvas id="canvas_Ageing"><canvas>');
+                ////For Bar Chart
+                //var ctx = document.getElementById("canvas_Ageing").getContext('2d');
+                //ctx.height = 900;
+                //var myChart = new Chart(ctx, {
+                //    type: 'bar',
+                //    //height: "230px",
+                //    //width: "300px",
+                //    autoSkip: false,
+                //    responsive: false,
+                //    animation: false,
+                //    showDatapoints: true,
+                //    legend: { position: 'bottom' },
+                //    data: barChartData,
+                //    options:
+                //            {
+                //                title:
+                //                {
+                //                    display: true,
+                //                    text: "ProductWise Sales Count"
+                //                },
+                //                responsive: true,
+                //                maintainAspectRatio: true
+                //            }
+                //    //options: {
+                //    //    //events: ['click'],
+                //    //    //scaleShowValues: true,
+                //    //    title: {
+                //    //        display: true,
+                //    //        text: ''
+                //    //    },
+                //    //    legend: {
+                //    //        position: 'right',
+                //    //    },
+                //    //    responsive: true,
+                //    //    tooltips: {
+                //    //        mode: 'index',
+                //    //        intersect: false
+                //    //    },
+                //    //    scales: {
+                //    //        xAxes: [{
+                //    //            stacked: true,
+                //    //            scaleLabel: {
+                //    //                display: true,
+                //    //                labelString: 'No. of Stones',
+                //    //                fontStyle: 'bold'
+                //    //            }
+                //    //        }],
+                //    //        yAxes: [{
+                //    //            stacked: true,
+                //    //            scaleLabel: {
+                //    //                display: true,
+                //    //                labelString: 'Days',
+                //    //                fontStyle: 'bold'
+                //    //            }
+                //    //        }]
+                //    //    }
+                //    //    //scales: {
+                //    //    //    yAxes: [{
+                //    //    //        ticks: {
+                //    //    //            beginAtZero: true
+                //    //    //        }
+                //    //    //    }],
+                //    //    //    xAxes: [{
+                //    //    //        ticks: {
+                //    //    //            autoSkip: false
+                //    //    //        }
+                //    //    //    }]
+                //    //    //}
+                //    //}
+                //});
+                //var canvas = document.getElementById('canvas_Ageing');
+                //canvas.onclick = function (evt) {
+                //    //alert('asd');
+                //    var activePoint = myChart.getElementAtEvent(evt)[0];
+                //    var data = activePoint._chart.data;
+                //    var datasetIndex = activePoint._datasetIndex;
+                //    var label = data.datasets[datasetIndex].label;
+                //    var value = data.datasets[datasetIndex].data[activePoint._index];
+                //    //alert(activePoint + '|' + data + '|' + datasetIndex + '|' + label + '|' + value);
+                //    //alert(activePoint._index + '|' + label + '|' + value + '|' + data.labels[datasetIndex]);
+                //    //Get_Stock_List(0, label, activePoint._model.label, 1);
+                //    //console.log(activePoint, data, datasetIndex, label, value, data.labels[datasetIndex], activePoint._model.label);
+                //};
+            },
+            "error": function (data) {
+                alert("Some Error Occured!");
+            }
+        });
+    }
+
+    function displayGraph() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetUserTaskAssignedHours", "Home")',
+            async: false,
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+                    //tableHeaders += "<th>Edit</th>";
+                    //var obj = { sTitle: "Select", orderable: false };
+                    //dynamicColumns[i] = obj;
+                    //i++;
+
+                    $("#gridboxmap2").empty();
+                    $("#gridboxmap2").append('<table id="tblShowAssigned" class="mdl-data-table" style="width:100%"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblShowAssigned').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                            if (aData[4] == "1") {
+                                $('td', nRow).css('background-color', 'darkseagreen');
+                            } else {
+                                $('td', nRow).css('background-color', '#eeeeee');
+                            }
+                        },
+                        "bDestroy": true,
+                        "bSort": false,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      var num = row[2];
+                                      var tmpNum = parseFloat(num).toFixed(2);
+                                      if (tmpNum >= 10) {
+                                          return '<span class="float-right"><b>' + row[2] + '</b>/' + row[1] + '</span><div class="progress progress-sm"><div class="progress-bar bg-success" style="width: ' + row[3] + '%"></div></div>'
+                                      }
+                                      else if (tmpNum >= 5) {
+                                          return '<span class="float-right"><b>' + row[2] + '</b>/' + row[1] + '</span><div class="progress progress-sm"><div class="progress-bar bg-warning" style="width: ' + row[3] + '%"></div></div>'
+                                      }
+                                      else {
+                                          return '<div class="progress-group"><span class="float-right"><b>' + row[2] + '</b>/' + row[1] + '</span><div class="progress progress-sm"><div class="progress-bar bg-danger" style="width: ' + row[3] + '%"></div></div></div>'
+                                      }
+                                  }
+                              },
+                              { "sWidth": "1%" }
+                        ],
+                        "columnDefs": [
+                            { "targets": [1], "visible": false },
+                            { "targets": [2], "visible": false },
+                            { "targets": [4], "visible": false }
+                            //{ "targets": [14], "visible": false },
+                            //{ "targets": [9], "visible": false },
+                            //{ "targets": [8], "visible": false },
+                            //{ "targets": [17], "visible": false },
+                            //{ "targets": [18], "visible": false }
+                            //{ "targets": [11], "visible": false },
+                            //{ "targets": [13], "visible": false }
+                        ]
+                    });
+                    //$('#tblExcelImport_Assesment_filter').hide();
+                    //$('#txtSearch').on('keyup', function () {
+                    //    $('#tblExcelImport_Assesment')
+                    //    .DataTable()
+                    //    .search($('#txtSearch').val(), false, true)
+                    //    .draw();
+                    //});
+                    //$('#txtSearch').on('change', function () {
+                    //    $('#tblExcelImport_Assesment')
+                    //    .DataTable()
+                    //    .search($('#txtSearch').val(), false, true)
+                    //    .draw();
+                    //});
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+
+    function displayGraph1() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetUserWorkingHours", "Home")',
+            async: false,
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+                    //tableHeaders += "<th>Edit</th>";
+                    //var obj = { sTitle: "Select", orderable: false };
+                    //dynamicColumns[i] = obj;
+                    //i++;
+
+                    $("#gridboxmap3").empty();
+                    $("#gridboxmap3").append('<table id="tblShowWorking" class="mdl-data-table" style="width:100%"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblShowWorking').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "bDestroy": true,
+                        "bSort": false,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                              { "sWidth": "1%" },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      var num = row[1];
+                                      var tmpNum = parseFloat(num).toFixed(2);
+                                      if (tmpNum >= 10) {
+                                          return '<span class="float-right"><b>' + row[1] + '</b>/10</span><div class="progress progress-sm"><div class="progress-bar bg-success" style="width: ' + row[2] + '%"></div></div>'
+                                      }
+                                      else if (tmpNum >= 5) {
+                                          return '<span class="float-right"><b>' + row[1] + '</b>/10</span><div class="progress progress-sm"><div class="progress-bar bg-warning" style="width: ' + row[2] + '%"></div></div>'
+                                      }
+                                      else {
+                                          return '<span class="float-right"><b>' + row[1] + '</b>/10</span><div class="progress progress-sm"><div class="progress-bar bg-danger" style="width: ' + row[2] + '%"></div></div>'
+                                      }
+                                  }
+                              },
+                              { "sWidth": "1%" }
+                        ],
+                        "columnDefs": [
+                            { "targets": [2], "visible": false }
+                            //{ "targets": [14], "visible": false },
+                            //{ "targets": [9], "visible": false },
+                            //{ "targets": [8], "visible": false },
+                            //{ "targets": [17], "visible": false },
+                            //{ "targets": [18], "visible": false }
+                            //{ "targets": [11], "visible": false },
+                            //{ "targets": [13], "visible": false }
+                        ]
+                    });
+
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+    function display() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAllWork_Status_List","Home")',
+            traditional: true,
+            async: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+                    var Options ='';
+                    $.each(json.UserList, function (key, value) {
+                        Options += "<option value=" + value.Login_ID + ">" + value.UserName + "</option>";
+                    });
+                    //alert(Options);
+                    //console.log(json.UserList);
+                    //var userData = UserList
+                    //tableHeaders += "<th>Save</th>";
+                    //var obj = { sTitle: "Select", orderable: false };
+                    //dynamicColumns[i] = obj;
+                    //i++;
+                    $("#gridboxmap1").empty();
+                    $("#gridboxmap1").append('<table id="tblExcelImport_Assesment" class="mdl-data-table" style="width:100%"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblExcelImport_Assesment').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                            if (aData[8] == "WIP") {
+                                $('td', nRow).css('background-color', 'darkseagreen');
+                            } else {
+                                $('td', nRow).css('background-color', '#eeeeee');
+                            }
+                        },
+                        "bDestroy": true,
+                        "bSort": false,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                              { "sWidth": "1%" },
+                           // { "sWidth": "1%" },
+                            {
+                               // "sWidth": "1%",
+                            "render": function (data, type, row, meta) {
+                                    if (type === 'display') {
+                                        @*data = '<a href='@Url.Action("AssignTasks", "Tasks", new { Task_ID = row[0] })">' + data + '</a>';*@
+                                        data = '<a href="../Tasks/AssignTasks?Task_ID=' + row[0] + '">' + data + '</a>';
+                                        //data = '<a href="" onclick="getbyID(' + row[0] + ');">' + data + '</a>';
+                                        //data = '<a href="" onclick="getbyID(' + row[0] + ');">' + data + '</a>';
+                                }
+                                return data;
+                            }
+                            },
+                              { "sWidth": "1%" },
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    return '<select class="form-control select2"  id ="ddlUser' + meta.row + '">' + Options + '</select>'
+                                }
+                            },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      return '<img src="/Clients/localhost/Users/' + row[10] + '.jpg" alt="user image" style="height:30px;width:30px;" class="img-circle">'
+                                  }
+                              },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      if (row[17] == "0") {
+                                          return '<a href="#" onclick="updateTestFlag(' + row[0] + ',1)"><i class="fa fa-star-o text-yellow"></i></a>'
+                                      }
+                                      else if (row[17] == "1") {
+                                          return '<a href="#" onclick="updateTestFlag(' + row[0] + ',0)"><i class="fa fa-star text-yellow"></i></a>'
+                                      }
+                                  }
+                            },
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                        //return '<center><a href="javascript:void(0);" id="' + row[0] + '" onclick="GetFormDetails(' + row[0] + ',\'' + row[1] + '\',\'' + row[3] + '\',\'' + row[7] + '\',\'' + row[5] + '\',\'' + row[9] + '\',\'' + row[11] + '\',\'' + row[13] + '\',\'' + row[15] + '\',\'' + row[16] + '\',\'' + row[17] + '\',\'' + row[18] + '\',\'' + row[10] + '\',' + row[19] + ',\'' + row[21] + '\')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                    return '<center><a href="javascript:void(0);" onclick="UserDataSave(' + row[0] + ',' + meta.row + ')" style="padding:5px;"><i class="fa fa-save" style="color:#444;"></i></a></center>'
+
+                                    }
+                                },
+                        ],
+                        "columnDefs": [
+                              { "targets": [0], "visible": false },
+                              { "targets": [2], "visible": false }
+                            //{ "targets": [10], "visible": false },
+                            //{ "targets": [13], "visible": false },
+                            //{ "targets": [14], "visible": false },
+                            //{ "targets": [9], "visible": false },
+                            //{ "targets": [8], "visible": false },
+                            //{ "targets": [17], "visible": false },
+                            //{ "targets": [18], "visible": false }
+                            //{ "targets": [11], "visible": false },
+                            //{ "targets": [13], "visible": false }
+                        ]
+                    });
+                    $('#tblExcelImport_Assesment_filter').hide();
+                    $('#txtSearch').on('keyup', function () {
+                        $('#tblExcelImport_Assesment')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                    $('#txtSearch').on('change', function () {
+                        $('#tblExcelImport_Assesment')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+    function getbyID(Task_ID) {
+                @*$.ajax({
+                   url: '@Url.Action("AssignTasks", "Tasks")',
+                    type: "POST",
+                    dataType: "json",
+                    async: false,
+                    //data: JSON.stringify({
+                    //    //Transaction_ID: Transaction_ID
+                    //    Task_ID: Task_ID
+                    //}),
+                    contentType: "application/json; charset=utf-8"
+                }).done(function (data) {
+                    if (data.success) {*@
+                        //var host = window.location.host;
+                        //alert('aa');
+                        //window.location.href = "Tasks/AssignTasks";
+
+                       // window.location.href = 'http://localhost:65253/Tasks/AssignTasks?Task_ID=' + Task_ID;
+                         //window.open('@Url.Action("AssignTasks", "Tasks")', '_blank').focus();
+                //     }
+
+                //});
+                var url = '@Url.Action("AssignTasks", "Tasks", new { Task_ID = "__Task_ID__" })';
+                window.location.href = url.replace('__Task_ID__', Task_ID);
+
+    }
+
+    function updateTestFlag(Taskid, flag) {
+        $.ajax({
+            url: '@Url.Action("UpdateTestFlag", "Home")',
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                Task_ID: Taskid,
+                Tested: flag
+            }),
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            if (data.success) {
+                display();
+            }
+        });
+    }
+
+     function GetDataUser() {
+         $.ajax({
+           type: "POST",
+           url: '@Url.Action("GetDataUser")',
+           traditional: true,
+           data: JSON.stringify({
+
+           }),
+           contentType: 'application/json; charset=utf-8',
+             success: function (json) {
+                 if (json) {
+                     var returnValue = ``;
+                     for (var i = 0; i < json.List.length; i++) {
+                         returnValue = returnValue += '<option value="' + json.List[i].Login_ID + '">' + json.List[i].UserName + ' </option>';
+                     }
+                     $('#ddlUser').html(returnValue);
+                     //console.log('Data', json);
+                 }
+             }
+        });
+     }
+    //getbyID();
+    function UserDataSave(TaskID, LoginID)
+    {
+        //alert($('#ddlUser' + LoginID).val());
+        $.ajax({
+            url: '@Url.Action("Updateuser", "Home")',
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                TaskID: TaskID,
+                LoginID: $('#ddlUser' + LoginID).val(),
+            }),
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            if (data.success) {
+                display();
+            }
+        });
+    }
+</script>

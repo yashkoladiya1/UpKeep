@@ -1,0 +1,442 @@
+﻿
+@{
+    ViewBag.Title = "Ledger_Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Ledger Master</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="Ledger_Code">Code</label>
+                            <input type="text" class="form-control" disabled="disabled" id="Ledger_Code" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="Ledger_Name"> Name</label>
+                            <input type="text" class="form-control formrequired" id="Ledger_Name" placeholder="Name" oninput="chechname();">
+                            @*@Html.DropDownList("ddl_Item_Code", (MultiSelectList)ViewBag.FormItemList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Item_Code" })*@
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Party_Address">Address</label>
+                            <input type="text" class="form-control" id="Party_Address" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_Pincode">Pincode</label>
+                            <input type="text" class="form-control" id="Party_Pincode" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_City_Code">City</label>
+                            @*<input type="text" class="form-control" id="Party_City_Code" autofocus="autofocus">*@
+                            @Html.DropDownList("ddl_Party_City_Code", (MultiSelectList)ViewBag.FormCityNameList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Display Name", @id = "ddl_Party_City_Code", @onchange = "checkcity();" })
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_State_Code">State</label>
+                            @*<input type="text" class="form-control" id="Party_State_Code" autofocus="autofocus" >*@
+                            @Html.DropDownList("ddl_Party_State_Code", (MultiSelectList)ViewBag.FormStateName, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Display Name", @id = "ddl_Party_State_Code", @onchange = "checkstate();" })
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_Country_Code">Party Country Code</label>
+                            @*<input type="text" class="form-control" id="Party_Country_Code" autofocus="autofocus" >*@
+                            @Html.DropDownList("ddl_Party_Country_Code", (MultiSelectList)ViewBag.FormCountryNameList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Display Name", @id = "ddl_Party_Country_Code", @onchange = "checkpartyCountry();" })
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_Phone">PhoneNo</label>
+                            <input type="text" class="form-control" id="Party_Phone" placeholder="No" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_Mobile">Mobile</label>
+                            <input type="text" class="form-control" id="Party_Mobile" placeholder="Mo" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_Email">Email</label>
+                            <input type="text" class="form-control" id="Party_Email" placeholder="Email ID" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Bank_Name">Bank Name</label>
+                            <input type="text" class="form-control" id="Bank_Name" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Bank_Branch">Bank Branch</label>
+                            <input type="text" class="form-control" id="Bank_Branch" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Bank_IFSC">Bank IFSC</label>
+                            <input type="text" class="form-control" id="Bank_IFSC" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Bank_AccountNo">Bank Account No</label>
+                            <input type="text" class="form-control" id="Bank_AccountNo" placeholder="No" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_PanNo">PanNo</label>
+                            <input type="text" class="form-control" id="Party_PanNo" placeholder="No" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Party_Type">Party Type</label>
+                            @*<input type="text" class="form-control" id="Party_Type" autofocus="autofocus">*@
+                            @Html.DropDownList("ddl_Party_Type", (MultiSelectList)ViewBag.FormPartyTypeList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Display Name", @id = "ddl_Party_Type", @onchange = "checktype();" })
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Remarks">Remarks</label>
+                            <input type="text" class="form-control" id="Remarks" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="HolidayStatus">Active</label>
+                            <input checked="checked" id="Active" name="Status" type="radio" value="Active" style="width:35px;" />Active
+                            <input id="DeActive" name="Status" type="radio" value="DeActive" style="width:35px;" /> DeActive
+                        </div>
+                        <div class="form-group">
+                            <label for="GSTIN">GSTIN</label>
+                            <input type="text" class="form-control" id="GSTIN" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="GSTIN_Effective_Date">GSTIN Effective Date</label>
+                            <input type="text" class="form-control" id="GSTIN_Effective_Date" autofocus="autofocus">
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary" onclick="SaveForm()">Save</button>
+                        <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Ledger Master List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:90%; margin:0 auto;">
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        show_loader();
+        display();
+        hide_loader();
+    });
+
+    //$('#demoGrid').DataTable({
+    //});
+
+    function Clear() {
+        $("#Ledger_Code").val("");
+        $("#Ledger_Name").val("");
+        $("#Party_Address").val("");
+        $("#Party_Pincode").val("");
+        $("#ddl_Party_City_Code").val("").trigger("change");
+        $("#Party_State_Code").val("").trigger("change");
+        $("#Party_Country_Code").val("").trigger("change");
+        $("#Party_Phone").val("");
+        $("#Party_Mobile").val("");
+        $("#Party_Email").val("");
+        $("#Bank_Name").val("");
+        $("#Bank_Branch").val("");
+        $("#Bank_IFSC").val("");
+        $("#Bank_AccountNo").val("");
+        $("#Party_PanNo").val("");
+        $("#ddl_Party_Type").val("").trigger("change");
+        $("#Remarks").val("");       
+        $("#Active").prop("checked", true);
+        $("#DeActive").prop("checked", false);
+        $("#GSTIN").val("");
+        $("#GSTIN_Effective_Date").val("");
+        $("#btnSave").text('Save');
+        $("#btnSave").attr('class', 'btn btn-primary');
+        document.getElementById('Ledger_Name').focus();
+    }
+
+    function GetFormDetails(Ledger_Code, Ledger_Name, Party_Address, Party_Pincode, Party_City_Code, City_Name, Party_State_Code, State_Name, Party_Country_Code,Country_Name, Party_Phone, Party_Mobile,
+        Party_Email, Bank_Name, Bank_Branch, Bank_IFSC, Bank_AccountNo, Party_PanNo, Party_Type, Remarks, Active, GSTIN, GSTIN_Effective_Date) {
+        $("#Ledger_Code").val(Ledger_Code);
+        $("#Ledger_Name").val(Ledger_Name);
+        $("#Party_Address").val(Party_Address);
+        $("#Party_Pincode").val(Party_Pincode);
+        $("#ddl_Party_City_Code").val(Party_City_Code).trigger("change");
+        $("#ddl_Party_State_Code").val(Party_State_Code).trigger("change");
+        $("#ddl_Party_Country_Code").val(Party_Country_Code).trigger("change");
+        $("#Party_Phone").val(Party_Phone);
+        $("#Party_Mobile").val(Party_Mobile);
+        $("#Party_Email").val(Party_Email);
+        $("#Bank_Name").val(Bank_Name);
+        $("#Bank_Branch").val(Bank_Branch);
+        $("#Bank_IFSC").val(Bank_IFSC);
+        $("#Bank_AccountNo").val(Bank_AccountNo);
+        $("#Party_PanNo").val(Party_PanNo);
+        $("#ddl_Party_Type").val(Party_Type).trigger("change");
+        $("#Remarks").val(Remarks);
+        $("#Active").prop("checked", Active == "1" ? true : false);
+        $("#DeActive").prop("checked", Active == "0" ? true : false);
+        $("#GSTIN").val(GSTIN);
+        $("#GSTIN_Effective_Date").val(GSTIN_Effective_Date);
+        $("#btnSave").text('Update');
+        $("#btnSave").attr('class', 'btn btn-warning');
+        document.getElementById('Ledger_Name').focus();
+    }
+
+    function SaveForm() {
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("Ledger_SaveForm", "Master")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    Ledger_Code: $("#Ledger_Code").val(),
+                    Ledger_Name: $("#Ledger_Name").val(),
+                    Party_Address: $("#Party_Address").val(),
+                    Party_Pincode: $("#Party_Pincode").val(),
+                    Party_City_Code: $("#ddl_Party_City_Code").val(),
+                    Party_State_Code: $("#ddl_Party_State_Code").val(),
+                    Party_Country_Code: $("#ddl_Party_Country_Code").val(),
+                    Party_Phone: $("#Party_Phone").val(),
+                    Party_Mobile: $("#Party_Mobile").val(),
+                    Party_Email: $("#Party_Email").val(),
+                    Bank_Name: $("#Bank_Name").val(),
+                    Bank_Branch: $("#Bank_Branch").val(),
+                    Bank_IFSC: $("#Bank_IFSC").val(),
+                    Bank_AccountNo: $("#Bank_AccountNo").val(),
+                    Party_PanNo: $("#Party_PanNo").val(),
+                    Party_Type: $("#ddl_Party_Type").val(),
+                    Remarks: $("#Remarks").val(),
+                    Active: $("#Active").prop("checked"),
+                    GSTIN: $("#GSTIN").val(),
+                    GSTIN_Effective_Date: $("#GSTIN_Effective_Date").val(),
+
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    //bootbox.alert(data.message);
+                    Clear();
+                    display();
+                }
+                else {
+                    bootbox.alert(data.message);
+                }
+            });
+        }
+    }
+
+    function display() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLedger_Master_List")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+
+                    tableHeaders += "<th>Edit</th>";
+                    var obj = { sTitle: "Select", orderable: false };
+                    dynamicColumns[i] = obj;
+                    i++;
+
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+
+                    $("#gridboxmap1").empty();
+                    $("#gridboxmap1").append('<table id="tblExcelImport" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px;white-space: nowrap;" class="table-bordered table-condensed table-striped grid"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 1;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblExcelImport').dataTable({
+                        "bDestroy": true,
+                        "bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "bDestroy": true,
+                        "bSort": true,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    return '<center><a href="javascript:void(0);" onclick="GetFormDetails(' + row[1] + ',\'' + row[2] + '\',\'' + row[3] + '\',\'' + row[4] + '\',' + row[5] + ',\'' + row[6] + '\',' + row[7] + ',\'' + row[8] + '\',' + row[9] + ',\'' + row[10] + '\',\'' + row[11] + '\',\'' + row[12] + '\',\'' + row[13] + '\',\'' + row[14] + '\',\'' + row[15] + '\',\'' + row[16] + '\',\'' + row[17] + '\',\'' + row[18] + '\',\'' + row[19] + '\',\'' + row[20] + '\',' + row[21] + ',\'' + row[22] + '\',\'' + row[23] + '\')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                }
+                            },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              
+                        ],
+                        "columnDefs": [
+                        { "targets": [1], "visible": false },
+                        { "targets": [3], "visible": false },
+                        {"targets": [5],"visible": false},
+                        {"targets": [7],"visible": false},
+                        {"targets": [9],"visible": false}             
+                        ]
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    };
+
+
+    $(function () {
+        $("#Start_Date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+0",
+            dateFormat: 'dd-M-yy'
+        });
+    });
+
+    $(function () {
+        $("#End_Date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+0",
+            dateFormat: 'dd-M-yy'
+        });
+
+    });
+     function chechname() {
+        var Ledger_Name = $('#Ledger_Name').val();
+        if (Ledger_Name != "") {
+            $('#Ledger_Name').css("background-color", "");
+            $('#Ledger_Name').css("border", "");
+        }
+    }
+    function checkcity() {
+        var ddl_Party_City_Code = $('#ddl_Party_City_Code').val();
+           if (ddl_Party_City_Code != "") {
+            $('#ddl_Party_City_Code').css("background-color", "");
+            $('#ddl_Party_City_Code').css("border", "");
+            return true;
+        }
+    }
+     function checkstate() {
+        var ddl_Party_State_Code = $('#ddl_Party_State_Code').val();
+        if (ddl_Party_State_Code != "") {
+            $('#ddl_Party_State_Code').css("background-color", "");
+            $('#ddl_Party_State_Code').css("border", "");
+        }
+    }
+    function checkpartyCountry() {
+        var Party_Country = $('#ddl_Party_Country_Code').val();
+        if (Party_Country != "") {
+            $('#ddl_Party_Country_Code').css("background-color", "");
+            $('#ddl_Party_Country_Code').css("border", "");
+            return true;
+        }
+    }
+    function checkparty() {
+        var ddl_Party_Type = $('#ddl_Party_Type').val();
+           if (ddl_Party_Type != "") {
+            $('#ddl_Party_Type').css("background-color", "");
+            $('#ddl_Party_Type').css("border", "");
+            return true;
+        }
+    }
+</script>
+
+
+
+
+

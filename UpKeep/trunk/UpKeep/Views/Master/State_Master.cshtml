@@ -1,0 +1,272 @@
+﻿
+@{
+    ViewBag.Title = "State_Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">State Master</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="State_ID">ID</label>
+                            <input type="StateID" disabled="disabled" class="form-control" id="State_ID" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="State_Name">Name</label>
+                            <input type="StateName" class="form-control formrequired" id="State_Name" placeholder="Name" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Country_Name">Country Name</label>
+                            @*<input type="CountryName" class="form-control" id="Country_Name" placeholder="Country Name">*@
+                            @Html.DropDownList("ddl_CountryName", (MultiSelectList)ViewBag.FormDisplayNameList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_CountryName" })
+                        </div>
+                        <div class="form-group">
+                            <label for="StateStatus">Active</label>
+                            <input checked="checked" id="Active" name="Status" type="radio" value="Active" style="width:35px;" />Active
+                            <input id="DeActive" name="Status" type="radio" value="DeActive" style="width:35px;" /> DeActive
+                        </div>
+                        <div class="form-group">
+                            <label for="Remark">Remark</label>
+                            <input type="State_Remark" class="form-control" id="Remark" placeholder="Remark">
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-primary" onclick="SaveForm()">Submit</button>
+                        <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">State List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:90%; margin:0 auto;">
+                        <input id="txtSearch" placeholder="General search" class="form-control" />
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        show_loader();
+        display();
+        hide_loader();
+    });
+
+    //$('#demoGrid').DataTable({
+    //});
+
+    function Clear() {
+        $("#State_ID").val("");
+        $("#State_Name").val("");
+        //$("#Country_Name").val("");
+        $("#ddl_CountryName").val("").trigger("change");
+        $("#Remark").val("");
+        $("#Active").prop("checked", true);
+        $("#DeActive").prop("checked", false);
+        document.getElementById('State_Name').focus();
+    }
+
+    function GetFormDetails(State_ID, State_Name, Active, Country_Name, Remark, Country_ID) {
+        $("#State_ID").val(State_ID);
+        $("#State_Name").val(State_Name);
+        //$("#Country_Name").val(Country_Name);
+        $('#ddl_CountryName').val(Country_ID).trigger('change');
+        $("#Active").prop("checked", Active == "1" ? true : false);
+        $("#DeActive").prop("checked", Active == "0" ? true : false);
+        $("#Remark").val(Remark);
+        document.getElementById('State_Name').focus();
+    }
+
+    function SaveForm() {
+      // alert("hio");
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("State_SaveForm", "Master")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    State_ID: $("#State_ID").val(),
+                    State_Name: $("#State_Name").val(),
+                    Active: $("#Active").prop("checked"),
+                    Remark: $("#Remark").val(),
+                    Country_ID: $("#ddl_CountryName").val()
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    Clear();
+                    display();
+                }
+                bootbox.alert(data.message);
+            });
+        }
+    }
+
+    function display() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetState_List")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+
+                    tableHeaders += "<th>Edit</th>";
+                    var obj = { sTitle: "Select", orderable: false };
+                    dynamicColumns[i] = obj;
+                    i++;
+
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+
+
+
+                    $("#gridboxmap1").empty();
+                    $("#gridboxmap1").append('<table id="tblExcelImport_State" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px; white-space: nowrap;" class="table-bordered table-condensed table-striped grid"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 1;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblExcelImport_State').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "bDestroy": true,
+                        "bSort": true,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                             {
+                                 "bSortable": false,
+                                 "sWidth": "1%",
+                                 "render": function (data, type, row, meta) {
+                                     return '<center><a href="javascript:void(0);" onclick="GetFormDetails(' + row[1] + ',\'' + row[2] + '\',' + row[3] + ',\'' + row[4] + '\',\'' + row[5] + '\',\'' + row[6] + '\')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                 }
+                             },
+                              { "sWidth": "5%" },
+                              { "sWidth": "20%" },
+                              { "sWidth": "5%" },
+                              { "sWidth": "35%" },
+                              { "sWidth": "35%" },
+                              { "sWidth": "35%" },
+
+                        ],
+                        "columnDefs": [
+           {
+               "targets": [1],
+               "visible": false
+           },
+           {
+               "targets": [6],
+               "visible": false
+           }
+                        ]
+                    });
+                    $('#tblExcelImport_State_filter').hide();
+                    $('#txtSearch').on('keyup', function () {
+                        $('#tblExcelImport_State')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                    $('#txtSearch').on('change', function () {
+                        $('#tblExcelImport_State')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+
+    $(document).ready(function () {
+        //$(".select2").select2();
+        $('#ddl_CountryName').select2({
+            //placeholder: "Please Select...",
+            width: '100%'
+        });
+    });
+
+    //function GetFormDetails(Country_ID, Country_Name,Active,Remark) {
+    //    $("#CountryID").val(Country_ID);
+    //    $("#Country_Name").val(Country_Name);
+    //    $("#Remark").val(Remark);
+    //}
+</script>

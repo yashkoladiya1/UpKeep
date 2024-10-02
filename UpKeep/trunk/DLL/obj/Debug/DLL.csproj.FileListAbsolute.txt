@@ -1,0 +1,11 @@
+E:\Project\UpKeep\trunk\DLL\bin\Debug\DLL.dll
+E:\Project\UpKeep\trunk\DLL\bin\Debug\DLL.pdb
+E:\Project\UpKeep\trunk\DLL\obj\Debug\DLL.csproj.CoreCompileInputs.cache
+E:\Project\UpKeep\trunk\DLL\obj\Debug\DLL.dll
+E:\Project\UpKeep\trunk\DLL\obj\Debug\DLL.pdb
+E:\UpKeep\UpKeep\trunk\DLL\bin\Debug\DLL.dll
+E:\UpKeep\UpKeep\trunk\DLL\bin\Debug\DLL.pdb
+E:\UpKeep\UpKeep\trunk\DLL\obj\Debug\DLL.csproj.CoreCompileInputs.cache
+E:\UpKeep\UpKeep\trunk\DLL\obj\Debug\DLL.dll
+E:\UpKeep\UpKeep\trunk\DLL\obj\Debug\DLL.pdb
+E:\UpKeep\UpKeep\trunk\DLL\obj\Debug\DLL.csproj.AssemblyReference.cache

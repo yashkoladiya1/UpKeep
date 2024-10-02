@@ -1,0 +1,906 @@
+﻿
+@{
+    ViewBag.Title = "ClientJobCard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+
+                <div class="box-header with-border">
+                    <h3 class="box-title">Client JobCard Master</h3>
+                </div>
+
+                
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="Job_ID">ID</label>
+                                <input type="text" class="form-control" id="Job_ID" placeholder="ID" disabled="disabled">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Entry_Date">Entry Date</label>
+                                <input type="text" class="form-control" id="Entry_Date" placeholder="Entry Date" autofocus="autofocus">
+                            </div>
+                         
+                        <div class="form-group col-md-4">
+                            <label for="Party_Code">Party Name</label>
+                            @Html.DropDownList("ddl_Ledger_Code", (MultiSelectList)ViewBag.FormPartyNameList, "Please Select ...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Ledger_Code", @onchange = "ShowItemDetails()" })
+                        </div>
+                                    <div class="col-md-2" style="margin-top:20px">
+                                        <button type="button" class="btn btn-default" @*onclick="Clear()"*@ data-toggle="modal" data-target="#modal-PopDefault" style="margin-left:30px;">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                              
+                           
+
+                            <div class="form-group col-md-6">
+                                <label for="Registration_No">Vehicle No</label>
+                                <input type="text" class="form-control" id="Registration_No" placeholder="Registration No">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Milage">Kms</label>
+                                <input type="text" class="form-control" id="Milage" placeholder="Kms">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Chassis_No">Chassis No</label>
+                                <input type="text" class="form-control" id="Chassis_No" placeholder="Chassis No">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Engine_No">Engine No</label>
+                                <input type="text" class="form-control" id="Engine_No" placeholder="Engine No">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Engine_No">Model No</label>
+                                <input type="text" class="form-control" id="Model_No" placeholder="Model No">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Contact_Person">Mobile No</label>
+                                <input type="text" class="form-control" id="Contact_Person" placeholder="Mobile No">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Customer_Request">Customer Request</label>
+                                @*<input type="text" class="form-control" id="Customer_Request" placeholder="Customer Request" autofocus="autofocus">*@
+                                <textarea name="Customer_Request" style="height:35px;" class="form-control" id="Customer_Request" placeholder="Customer Request"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Primary_Job">Primary Job</label>
+                                @*<input type="text" class="form-control" id="Primary_Job" placeholder="Primary Job" autofocus="autofocus">*@
+                                <textarea name="Primary_Job" style="height:35px;" class="form-control" id="Primary_Job" placeholder="Primary Job"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Secondary_Job">Secondary Job</label>
+                                @*<input type="text" class="form-control" id="Secondary_Job" placeholder="Secondary Job" autofocus="autofocus">*@
+                                <textarea name="Secondary_Job" style="height:35px;" class="form-control" id="Secondary_Job" placeholder="Secondary Job"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <br />
+                                <input type="checkbox" id="Additional_Job_Confirm" class="form-group flat-red" style="display: block;">
+                                <label for="Additional_Job_Confirm">Additional Job Confirmation</label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Additional_Job">Additional Job</label>
+                                <textarea name="Additional_Job" style="height:35px;" class="form-control" id="Additional_Job" placeholder="Additional Job"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Promised_Date">Promissed Date</label>
+                                <input type="text" class="form-control" id="Promised_Date" placeholder="Date">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Promised_Time">Promissed Time</label>
+                                <input type="text" class="form-control timepicker" id="Promised_Time" placeholder="Time">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Estimated_Amount">Estimated Amount</label>
+                                <input type="text" class="form-control" id="Estimated_Amount" placeholder="Estimated_Amount">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Service_Advisor">Service Advisor</label>
+                                <input type="text" class="form-control" id="Service_Advisor" placeholder="Service_Advisor">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Service_Box" class="flat-red">
+                                <label for="IS_Service_Box">Service Box</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Toolkit" class="flat-red">
+                                <label for="IS_Toolkit">Toolkit</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_ToolkitIS_Spare_Wheel" class="flat-red">
+                                <label for="IS_Spare_Wheel">Spare Wheel</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Jack" class="flat-red">
+                                <label for="IS_Jack">Jack</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Jack_Handle" class="flat-red">
+                                <label for="IS_Jack_Handle">Jack Handle</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Car_Perfume" class="flat-red">
+                                <label for="IS_Car_Perfume">Car Perfume</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Clock" class="flat-red">
+                                <label for="IS_Clock">Clock</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Stereo" class="flat-red">
+                                <label for="IS_Stereo">Stereo</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_CD_Player" class="flat-red">
+                                <label for="IS_CD_Player">CD Player</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Mouth_Pieces" class="flat-red">
+                                <label for="IS_Mouth_Pieces">Mouth Pieces</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_CD_Changer" class="flat-red">
+                                <label for="IS_CD_Changer">CD Changer</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="IS_Battery" class="flat-red">
+                                <label for="IS_Battery">Battery</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Typers">Tyres</label>
+                                <input type="text" class="form-control" id="Typers" placeholder="Typers">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Idols_Nos">Idols Nos</label>
+                                <input type="text" class="form-control" id="Idols_Nos" placeholder="Idols">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Wheel_Cover_Nos">Wheel Cover Nos</label>
+                                <input type="text" class="form-control" id="Wheel_Cover_Nos" placeholder="Wheel Covers">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Wheels_Cap_Nos">Wheels Cap Nos</label>
+                                <input type="text" class="form-control" id="Wheels_Cap_Nos" placeholder="Wheel Cap">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Mud_Flaps_Nos">Mud Flaps Nos</label>
+                                <input type="text" class="form-control" id="Mud_Flaps_Nos" placeholder="Mud Flaps">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Dicky_Mat_Nos">Dicky Mat Nos</label>
+                                <input type="text" class="form-control" id="Dicky_Mat_Nos" placeholder="Dicky Mat">
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="Speaker_RR_Nos">Speaker RR Nos</label>
+                                <input type="text" class="form-control" id="Speaker_RR_Nos" placeholder="Speaker RR">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Speaker_FR_Nos">Speaker FR Nos</label>
+                                <input type="text" class="form-control" id="Speaker_FR_Nos" placeholder="Speaker FR">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Tweeter_Nos">Tweeter Nos</label>
+                                <input type="text" class="form-control" id="Tweeter_Nos" placeholder="Tweeter">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="Cigaret_Higher" class="flat-red">
+                                <label for="Cigaret_Higher">Cigaret Higher</label>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="checkbox" id="Exl_Warranty" class="flat-red">
+                                <label for="Exl_Warranty">Exl Warranty</label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Remarks">Remarks</label>
+                                <textarea name="Remarks" style="height:35px;" class="form-control" id="Remarks" placeholder="Remark"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="Invoice_No">Invoice No</label>
+                                <input type="text" class="form-control" id="Invoice_No" placeholder="Invoice No">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+                        <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Client JobCard List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:90%; margin:0 auto;">
+                        <input id="txtSearch" placeholder="General search" class="form-control" />
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+        <div class="modal fade" id="modal-PopDefault">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding-bottom: 50px;padding-top: 10px;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <center><h4><b>Add PartyName</b></h4></center>
+                        <br />
+                        <div class="form-group col-md-6">
+                            <label for="Party_Name">Party Name</label>
+                            <input type="text" class="form-control formrequired valrequired" id="txtPartyNamepopup" placeholder="" autocomplete="off" tabindex="4">
+                            @*@Html.DropDownList("ddl_Party_Name", (MultiSelectList)ViewBag.Party_Name, "Please Select ...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Party_Name", @onchange = "ShowItemDetails()", @tabindex = "3" })*@
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="Party_Name">Mobile No</label>
+                            @*@Html.DropDownList("ddl_Party_Name", (MultiSelectList)ViewBag.Party_Name, "Please Select ...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Party_Name", @onchange = "ShowItemDetails()", @tabindex = "3" })*@
+                            <input type="number" class="form-control formrequired valrequired" id="txtMobileNopopup" placeholder="" autocomplete="off" tabindex="4">
+                        </div>
+                        <br /><br />
+                        <center><button type="button" id="btnSavepopup" class="btn btn-success" style="margin-top:30px">Save</button></center>
+                        <br />
+                    </div>
+
+                    @*<div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>*@
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    var count = 0;
+
+    $(document).ready(function () {
+        show_loader();
+        display();
+        hide_loader();
+        $('.select2').select2();
+        $("#Entry_Date").datepicker().datepicker("setDate", new Date());
+        $("#Promised_Date").datepicker().datepicker("setDate", new Date());
+
+        $('#btnSave').click(function () {
+            $.ajax({
+                url: '@Url.Action("JobCard_SaveForm", "ShyamMotors")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    Job_ID: $("#Job_ID").val(), Entry_Date: $("#Entry_Date").val(), Party_Code: $("#ddl_Ledger_Code").val(),
+                    Contact_Person: $("#Contact_Person").val(), Registration_No: $("#Registration_No").val(), Milage: $("#Milage").val(),
+                    Chassis_No: $("#Chassis_No").val(), Engine_No: $("#Engine_No").val(), Model_No: $("#Model_No").val(), Customer_Request: $("#Customer_Request").val(),
+                    Primary_Job: $("#Primary_Job").val(), Additional_Job: $("#Additional_Job").val(),
+                    Secondary_Job: $("#Secondary_Job").val(), Additional_Job_Time: $("#Additional_Job_Time").val(),
+                    Additional_Job_Date: $("#Additional_Job_Date").val(), Promised_Date: $("#Promised_Date").val(),
+                    Promised_Time: $("#Promised_Time").val(), Additional_Job_Confirm: $("#Additional_Job_Confirm").prop("checked"),
+                    Estimated_Amount: $("#Estimated_Amount").val(), Service_Advisor: $("#Service_Advisor").val(),
+                    Remarks: $("#Remarks").val(), IS_Service_Box: $("#IS_Service_Box").prop("checked"),
+                    IS_Toolkit: $("#IS_Toolkit").prop("checked"), IS_Spare_Wheel: $("#IS_Spare_Wheel").prop("checked"),
+                    IS_Jack: $("#IS_Jack").prop("checked"), IS_Jack_Handle: $("#IS_Jack_Handle").prop("checked"),
+                    IS_Car_Perfume: $("#IS_Car_Perfume").prop("checked"), IS_Clock: $("#IS_Clock").prop("checked"),
+                    IS_Stereo: $("#IS_Stereo").prop("checked"), IS_CD_Player: $("#IS_CD_Player").prop("checked"),
+                    IS_Mouth_Pieces: $("#IS_Mouth_Pieces").prop("checked"), IS_CD_Changer: $("#IS_CD_Changer").prop("checked"),
+                    IS_Battery: $("#IS_Battery").prop("checked"), Typers: $("#Typers").val(),
+                    Idols_Nos: $("#Idols_Nos").val(), Wheel_Cover_Nos: $("#Wheel_Cover_Nos").val(),
+                    Wheels_Cap_Nos: $("#Wheels_Cap_Nos").val(), Mud_Flaps_Nos: $("#Mud_Flaps_Nos").val(),
+                    Dicky_Mat_Nos: $("#Dicky_Mat_Nos").val(), Cigaret_Higher: $("#Cigaret_Higher").prop("checked"),
+                    Speaker_RR_Nos: $("#Speaker_RR_Nos").val(), Speaker_FR_Nos: $("#Speaker_FR_Nos").val(),
+                    Tweeter_Nos: $("#Tweeter_Nos").val(), Exl_Warranty: $("#Exl_Warranty").prop("checked"),
+                    ItemSaleMasterID: $("#Invoice_No").val()
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    Clear();
+                    display();
+                }
+                bootbox.alert(data.message);
+            });
+
+        });
+
+        function display() {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("JobCard_Master_GetData")',
+                traditional: true,
+                contentType: 'application/json; charset=utf-8',
+                success: function (json) {
+                    if (json) {
+                        var tableHeaders = '';
+                        var dynamicColumns = [];
+                        var i = 0;
+                        //var v = JSON(data)
+                        $.each(json.List[0], function (key, value) {
+                            tableHeaders += "<th>" + key + "</th>";
+
+                            var obj = { sTitle: key, orderable: false };
+
+                            dynamicColumns[i] = obj;
+                            i++;
+                        });
+                        tableHeaders += "<th>Edit</th>";
+                        var obj = { sTitle: "Select", orderable: false };
+                        dynamicColumns[i] = obj;
+                        i++;
+
+                        tableHeaders += "<th>Export</th>";
+                        obj = { sTitle: "Select", orderable: false };
+                        dynamicColumns[i] = obj;
+                        i++;
+
+                        $("#gridboxmap1").empty();
+                        $("#gridboxmap1").append('<table id="tblExcelImport_JobCard" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px;white-space: nowrap;" class="table-bordered table-condensed table-striped grid"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                        //fetch all records from JSON result and make row data set.
+                        var rowDataSet = [];
+                        var i = 0;
+                        $.each(json.List, function (key, value) {
+                            var rowData = [];
+                            var j = 0;
+                            $.each(json.List[i], function (key, value) {
+                                rowData[j] = value;
+                                j++;
+                            });
+                            rowDataSet[i] = rowData;
+
+                            i++;
+                        });
+                        var oTable = $('#tblExcelImport_JobCard').dataTable({
+                            "bDestroy": true,
+                            //"bFilter": false,
+                            "serverSide": false,
+                            "bInfo": true,
+                            "bAutoWidth": false,
+                            "bPaginate": true,
+                            "bLengthChange": true,
+                            //"fnPreDrawCallback": function () {
+                            //    show_loader();
+                            //},
+                            //"fnDrawCallback": function () {
+                            //    hide_loader();
+                            //},
+                            "bDestroy": true,
+                            "bSort": true,
+                            "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                            "aaData": rowDataSet,
+                            //"aoColumns": dynamicColumns,
+                            "columns": [
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                 { "sWidth": "1%" },
+                                  {
+                                      "bSortable": false,
+                                      "sWidth": "1%",
+                                      "render": function (data, type, row, meta) {
+                                          return '<center><a href="javascript:void(0);" onclick="GetFormDetails(' + row[0] + ',\'' + row[1] + '\',' + row[2] + ',\'' + row[3] + '\',\'' + row[4] + '\',\'' + row[5] + '\',\'' + row[6] + '\',\'' + row[7] + '\',\'' + row[8] + '\',\'' + row[9] + '\',\'' + encodeURIComponent(row[10]) + '\',\'' + encodeURIComponent(row[11]) + '\',\'' + encodeURIComponent(row[12]) + '\',\'' + encodeURIComponent(row[13]) + '\',\'' + row[14] + '\',\'' + row[15] + '\',\'' + row[16] + '\',\'' + row[17] + '\',\'' + row[18] + '\',\'' + row[19] + '\',\'' + row[20] + '\',\'' + row[21] + '\',\'' + row[22] + '\',\'' + row[23] + '\',\'' + row[24] + '\',\'' + row[25] + '\',\'' + row[26] + '\',\'' + row[27] + '\',\'' + row[28] + '\',\'' + row[29] + '\',\'' + row[30] + '\',\'' + row[31] + '\',\'' + row[32] + '\',\'' + row[33] + '\',\'' + row[34] + '\',\'' + row[35] + '\',\'' + row[36] + '\',\'' + row[37] + '\',\'' + row[38] + '\',\'' + row[39] + '\',\'' + row[40] + '\',\'' + row[41] + '\',\'' + row[42] + '\',\'' + row[43] + '\')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                      }
+                                  },
+
+                                  {
+                                      "bSortable": false,
+                                      "sWidth": "1%",
+                                      "render": function (data, type, row, meta) {
+                                          return '<center><a href="javascript:void(0);" onclick="PrintInvoice(' + row[0] + ')" style="padding:5px;"><i class="fa fa-file-pdf-o" style="color:#444;"></i></a></center>'
+                                      }
+                                  }
+
+                            ],
+                            "columnDefs": [
+                                { "targets": [0], "visible": false },
+                                { "targets": [2], "visible": false },
+                                { "targets": [6], "visible": false },
+                                { "targets": [9], "visible": false },
+                                { "targets": [10], "visible": false },
+                                { "targets": [11], "visible": false },
+                                { "targets": [12], "visible": false },
+                                { "targets": [13], "visible": false },
+                                { "targets": [16], "visible": false },
+                                { "targets": [18], "visible": false },
+                                { "targets": [19], "visible": false },
+                                { "targets": [20], "visible": false },
+                                { "targets": [21], "visible": false },
+                                { "targets": [22], "visible": false },
+                                { "targets": [23], "visible": false },
+                                { "targets": [24], "visible": false },
+                                { "targets": [25], "visible": false },
+                                { "targets": [26], "visible": false },
+                                { "targets": [27], "visible": false },
+                                { "targets": [28], "visible": false },
+                                { "targets": [29], "visible": false },
+                                { "targets": [30], "visible": false },
+                                { "targets": [31], "visible": false },
+                                { "targets": [32], "visible": false },
+                                { "targets": [33], "visible": false },
+                                { "targets": [34], "visible": false },
+                                { "targets": [35], "visible": false },
+                                { "targets": [36], "visible": false },
+                                { "targets": [37], "visible": false },
+                                { "targets": [38], "visible": false },
+                                { "targets": [39], "visible": false },
+                                { "targets": [40], "visible": false },
+                                { "targets": [41], "visible": false },
+                                { "targets": [42], "visible": false }
+                            ]
+                        });
+                        $('#tblExcelImport_JobCard_filter').hide();
+                        $('#txtSearch').on('keyup', function () {
+                            $('#tblExcelImport_JobCard')
+                            .DataTable()
+                            .search($('#txtSearch').val(), false, true)
+                            .draw();
+                        });
+                        $('#txtSearch').on('change', function () {
+                            $('#tblExcelImport_JobCard')
+                            .DataTable()
+                            .search($('#txtSearch').val(), false, true)
+                            .draw();
+                        });
+                    }
+                },
+                error: function (json) { alert("Error " + json) }
+            });
+        };
+    });
+
+    $('#btnSavepopup').click(function () {
+        if ($("#txtPartyNamepopup").val() == "" || $("#txtMobileNopopup").val() == "") {
+            alert("Please Fill Up All Fields..!!");
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("Ledger_SaveForm", "ShyamMotors")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    //Ledger_Code: $("#Ledger_Code").val(),
+                    Party_Name: $("#txtPartyNamepopup").val(),
+                    //Party_Address: $("#Party_Address").val(),
+                    //Party_Pincode: $("#Party_Pincode").val(),
+                    //Party_City_Code: 0,
+                    //Party_State_Code: 0,
+                    //Party_Country_Code:0,
+                    //Party_Phone: $("#Party_Phone").val(),
+                    Mobile_No: $("#txtMobileNopopup").val()
+                    //Party_Email: $("#Party_Email").val(),
+                    //Bank_Name: $("#Bank_Name").val(),
+                    //Bank_Branch: $("#Bank_Branch").val(),
+                    //Bank_IFSC: $("#Bank_IFSC").val(),
+                    //Bank_AccountNo: $("#Bank_AccountNo").val(),
+                    //Party_PanNo: $("#Party_PanNo").val(),
+                    //Party_Type: $("#ddl_Party_Type").val(),
+                    //Remarks: $("#Remarks").val(),
+                    //Active: 0,
+                    //GSTIN: $("#GSTIN").val(),
+                    //GSTIN_Effective_Date: $("#GSTIN_Effective_Date").val(),
+
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    //alert(data.Sales_ID);
+                    var rowData = myTable.rows().data();
+                    //rowData.each(function (value, index) {
+                        @*$.ajax({
+                            url: '@Url.Action("Ledger_SaveForm", "Sales")',
+                            type: "POST",
+                            dataType: "json",
+                            data: JSON.stringify({
+                                //ItemSaleDetailID: value[1],
+                                //ItemSaleMasterID: data.Sales_ID,
+                                //Item_Name: value[3],
+                                //unitCode: value[4],
+                                //Quantity: value[6],
+                                //HSN_ID: value[8],
+                                //Rate: value[9],
+                                //Gross_Amt: value[10],
+                                //Disc_Per: value[11],
+                                //SGST: value[12],
+                                //SGST_Amt: value[13],
+                                //CGST: value[14],
+                                //CGST_Amt: value[15],
+                                //IGST: value[16],
+                                //IGST_Amt: value[17],
+                                /*Net_Amt: value[18]*///(Number(value[10]) - Number(value[11]) + Number(value[13]) + Number(value[15]) + Number(value[17]))
+                            }),
+                            contentType: "application/json; charset=utf-8"
+                        }).done(function (data) {
+                            if (data.success) {
+                                Clear();
+                                display();
+                            }
+                            //bootbox.alert(data.message);
+                        });*@
+                    //});
+                    //bootbox.confirm({
+                    //    message: data.message + " Do you want to print invoice?",
+                    //    buttons: {
+                    //        confirm: {
+                    //            label: 'Yes',
+                    //            className: 'btn-success'
+                    //        },
+                    //        cancel: {
+                    //            label: 'No',
+                    //            className: 'btn-danger'
+                    //        }
+                    //    },
+                    //    callback: function (result) {
+                    //        if (result) {
+                    //            //PrintInvoice(data.Sales_ID, $("#Tran_Date").val(), $("#Invoice_No").val());
+                    //            alert("Record Saved Successfully");
+                    //            //alert($("#txtPartyNamepopup").val());
+                    //            $("#modal-PopDefault").modal("hide");
+
+                    //            $("#ddl_Party_Name").val("#txtPartyNamepopup")
+                    //            SetDropDown();
+
+
+                    //        @*window.location.href = '@Url.Action("EstimateEntry", "Sales")';*@
+                    //        }
+                    //        //console.log('This was logged in the callback: ' + result);
+                    //    }
+                    //});
+                    // Clear();
+
+
+
+                    alert("Record Saved Successfully");
+                    //alert($("#txtPartyNamepopup").val());
+                    $("#modal-PopDefault").modal("hide");
+
+                    $("#ddl_Party_Name").val($("#txtPartyNamepopup").val()).trigger("change");
+                    $("#Contact_Person").val($("#txtMobileNopopup").val());
+
+                    SetDropDown();
+                    //  display();
+                    //bootbox.alert(data.message);
+                }
+            })
+        }
+            count = 0;
+            $("#btnSave").text('Save');
+            $("#btnSave").attr('class', 'btn btn-success');
+      });
+
+    function SetDropDown() {
+
+        //show_loader();
+        //alert($("#ddlProject" + prefix).val());
+        if ($("#txtPartyNamepopup").val()!="")
+        {
+            $.ajax({
+                "url": '@Url.Action("GetLedgerMaster")',
+                "data": {
+                //projectid: $("#txtPartyNamepopup" + prefix).val()
+                },
+                async: false,
+                dataType: "json",
+                type: "GET",
+                error: function (e) {
+                    debugger
+                // alert("hi");
+                alert(" An error occurred module.");
+                },
+                success: function (data) {
+                    debugger
+                    $("#ddl_Ledger_Code").empty();
+                var optionhtml1 = '<option value="' +
+                     0 + '">' + "Select Module" + '</option>';
+                    $("#ddl_Ledger_Code").append(optionhtml1);
+
+                $.each(data, function (i) {
+                    debugger
+                    if (data[i].Text == $("#txtPartyNamepopup").val()) {
+                        var optionhtml = '<option value="' + data[i].Value + '" selected>' + data[i].Text + '</option>';
+                        $("#ddl_Ledger_Code").append(optionhtml);
+                    }
+                    else {
+                        var optionhtml = '<option value="' + data[i].Value + '">' + data[i].Text + '</option>';
+                        $("#ddl_Ledger_Code").append(optionhtml);
+                    }
+
+
+
+                });
+                }
+                });
+                }
+                //hide_loader();
+    }
+
+    var myTable = $('#myTable').DataTable({
+            'bFilter': false,
+            'bInfo': false,
+            'bPaginate': false,
+            "fnDrawCallback": function (row, data, start, end, display) {
+
+                var api = this.api();
+                nb_cols = api.columns().nodes().length;
+                var j = 6;
+                while (j < nb_cols) {
+                    if (j == 7 || j == 8 || j == 9 || j == 12 || j == 14 || j == 16 || j == 19 || j == 20) {
+                        j++;
+                    }
+                    else {
+                        var pageTotal = api
+                        //.column( j, { page: 'current'} )
+                        .column(j)
+                        .data()
+                        .reduce(function (a, b) {
+                            return Number(a) + Number(b);
+                        }, 0);
+                        // Update footer
+                        $(api.column(j).footer()).html(pageTotal.toFixed(2));
+                        j++;
+                    }
+                }
+            },
+            "columns": [
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%", "className": "SalesDetailIDCell", "name": "SalesDetailID" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      return '<center><a href="javascript:void(0);" onclick="EditDetails(' + row[0] + ',' + row[2] + ',' + row[6] + ',' + row[9] + ',' + row[11] + ')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                  }
+                              },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      return '<center><a href="javascript:void(0);" class="del" style="padding:5px;"><i class="fa fa-times" style="color:#444;"></i></a></center>'
+                                      //return '<center><i id="del" class="fa fa-edit" style="color:#444;"></i></center>'
+                                  }
+                              }
+            ],
+            "columnDefs": [
+                { "targets": [0], "visible": false },
+                { "targets": [1], "visible": false },
+                { "targets": [2], "visible": false },
+                { "targets": [4], "visible": false },
+                { "targets": [8], "visible": false }
+            ]
+        });
+
+
+
+
+
+    function GetFormDetails(Job_ID, Entry_Date, Party_Code, Party_Name, Contact_Person, Registration_No, Milage, Chassis_No, Engine_No, Model_No, Customer_Request,
+       Primary_Job, Additional_Job, Secondary_Job, Promised_Date, Promised_Time, Additional_Job_Confirm, Estimated_Amount, Service_Advisor, Remarks, IS_Service_Box,
+       IS_Toolkit, IS_Spare_Wheel, IS_Jack, IS_Jack_Handle, IS_Car_Perfume, IS_Clock, IS_Stereo, IS_CD_Player, IS_Mouth_Pieces, IS_CD_Changer,
+       IS_Battery, Typers, Idols_Nos, Wheel_Cover_Nos, Wheels_Cap_Nos, Mud_Flaps_Nos, Dicky_Mat_Nos, Cigaret_Higher, Speaker_RR_Nos, Speaker_FR_Nos,
+       Tweeter_Nos, Exl_Warranty, ItemSaleMasterID) {
+        $("#Job_ID").val(Job_ID);
+        $("#Entry_Date").val(Entry_Date);
+        $("#ddl_Ledger_Code").val(Party_Code).trigger("change");
+        $("#Contact_Person").val(Contact_Person);
+        $("#Registration_No").val(Registration_No);
+        $("#Milage").val(Milage);
+        $("#Chassis_No").val(Chassis_No);
+        $("#Engine_No").val(Engine_No);
+        $("#Model_No").val(Model_No);
+        $("#Customer_Request").val(decodeURIComponent(Customer_Request));
+        $("#Primary_Job").val(decodeURIComponent(Primary_Job));
+        $("#Additional_Job").val(decodeURIComponent(Additional_Job));
+        $("#Secondary_Job").val(decodeURIComponent(Secondary_Job));
+        $("#Promised_Date").val(Promised_Date);
+        $("#Promised_Time").val(Promised_Time);
+        $("#Estimated_Amount").val(Estimated_Amount);
+        $("#Service_Advisor").val(Service_Advisor);
+        $("#Remarks").val(Remarks);
+        $('#Additional_Job_Confirm').iCheck(Additional_Job_Confirm == "True" ? 'check' : 'uncheck');
+        $('#IS_Service_Box').iCheck(IS_Service_Box == "True" ? 'check' : 'uncheck');
+        $('#IS_Toolkit').iCheck(IS_Toolkit == "True" ? 'check' : 'uncheck');
+        $('#IS_Spare_Wheel').iCheck(IS_Spare_Wheel == "True" ? 'check' : 'uncheck');
+        $('#IS_Jack').iCheck(IS_Jack == "True" ? 'check' : 'uncheck');
+        $('#IS_Jack_Handle').iCheck(IS_Jack_Handle == "True" ? 'check' : 'uncheck');
+        $('#IS_Car_Perfume').iCheck(IS_Car_Perfume == "True" ? 'check' : 'uncheck');
+        $('#IS_Clock').iCheck(IS_Clock == "True" ? 'check' : 'uncheck');
+        $('#IS_Stereo').iCheck(IS_Stereo == "True" ? 'check' : 'uncheck');
+        $('#IS_CD_Player').iCheck(IS_CD_Player == "True" ? 'check' : 'uncheck');
+        $('#IS_Mouth_Pieces').iCheck(IS_Mouth_Pieces == "True" ? 'check' : 'uncheck');
+        $('#IS_CD_Changer').iCheck(IS_CD_Changer == "True" ? 'check' : 'uncheck');
+        $('#IS_Battery').iCheck(IS_Battery == "True" ? 'check' : 'uncheck');
+        $('#Cigaret_Higher').iCheck(Cigaret_Higher == "True" ? 'check' : 'uncheck');
+        $('#Exl_Warranty').iCheck(Exl_Warranty == "True" ? 'check' : 'uncheck');
+        $("#Typers").val(Typers);
+        $("#Idols_Nos").val(Idols_Nos);
+        $("#Wheel_Cover_Nos").val(Wheel_Cover_Nos);
+        $("#Wheels_Cap_Nos").val(Wheels_Cap_Nos);
+        $("#Mud_Flaps_Nos").val(Mud_Flaps_Nos);
+        $("#Dicky_Mat_Nos").val(Dicky_Mat_Nos);
+        $("#Speaker_RR_Nos").val(Speaker_RR_Nos);
+        $("#Speaker_FR_Nos").val(Speaker_FR_Nos);
+        $("#Tweeter_Nos").val(Tweeter_Nos);
+        $("#Invoice_No").val(ItemSaleMasterID);
+        $("#btnSave").text('Update');
+        $("#btnSave").attr('class', 'btn btn-warning');
+        document.getElementById('Registration_No').focus();
+
+    }
+
+    function Clear() {
+        $("#Job_ID").val("");
+        $("#Entry_Date").val("");
+        $("#ddl_Ledger_Code").val("").trigger("change");
+        $("#Contact_Person").val("");
+        $("#Registration_No").val("");
+        $("#Milage").val("");
+        $("#Chassis_No").val("");
+        $("#Engine_No").val("");
+        $("#Model_No").val("");
+        $("#Customer_Request").val("");
+        $("#Primary_Job").val("");
+        $("#Additional_Job").val("");
+        $("#Secondary_Job").val("");
+        $("#Promised_Date").val("");
+        $("#Promised_Time").val("");
+        $("#Estimated_Amount").val("");
+        $("#Service_Advisor").val("");
+        $("#Remarks").val("");
+        $('#Additional_Job_Confirm').iCheck('uncheck');
+        $('#IS_Service_Box').iCheck('uncheck');
+        $('#IS_Toolkit').iCheck('uncheck');
+        $('#IS_Spare_Wheel').iCheck('uncheck');
+        $('#IS_Jack').iCheck('uncheck');
+        $('#IS_Jack_Handle').iCheck('uncheck');
+        $('#IS_Car_Perfume').iCheck('uncheck');
+        $('#IS_Clock').iCheck('uncheck');
+        $('#IS_Stereo').iCheck('uncheck');
+        $('#IS_CD_Player').iCheck('uncheck');
+        $('#IS_Mouth_Pieces').iCheck('uncheck');
+        $('#IS_CD_Changer').iCheck('uncheck');
+        $('#IS_Battery').iCheck('uncheck');
+        $('#Cigaret_Higher').iCheck('uncheck');
+        $('#Exl_Warranty').iCheck('uncheck');
+        $("#Typers").val("");
+        $("#Idols_Nos").val("");
+        $("#Wheel_Cover_Nos").val("");
+        $("#Wheels_Cap_Nos").val("");
+        $("#Mud_Flaps_Nos").val("");
+        $("#Dicky_Mat_Nos").val("");
+        $("#Speaker_RR_Nos").val("");
+        $("#Tweeter_Nos").val("");
+        $("#Invoice_No").val("");
+        $("#btnSave").text('Save');
+        $("#btnSave").attr('class', 'btn btn-primary');
+    }
+
+    function PrintInvoice(Job_Id) {
+        $.ajax({
+            url: '@Url.Action("JobCard_ReportGet", "Report")',
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                jobid: Job_Id
+            }),
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            if (data.success) {
+                window.open("../GenericReportViewer/ShowGenericRpt", 'mywindow', 'fullscreen=yes, scrollbars=auto');
+            }
+            bootbox.alert(data.message);
+        });
+    }
+
+  function ShowItemDetails() {
+                if ($("#txtParty_Name").val() == '') {
+                    $("#ddl_Item_Name").prop('disabled', true);
+                $("#txtQTY").prop('disabled', true);
+                $("#txtRate").prop('disabled', true);
+                $("#txtDiscount").prop('disabled', true);
+                $("#btnAdd").prop('disabled', true);
+                }
+                else {
+                    $("#ddl_Item_Name").prop('disabled', false);
+                $("#txtQTY").prop('disabled', false);
+                $("#txtRate").prop('disabled', false);
+                $("#txtDiscount").prop('disabled', false);
+                $("#btnAdd").prop('disabled', false);
+                    }
+
+                     $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("GetPartyMobileNo")',
+                                async: false,
+                                traditional: true,
+                                data: JSON.stringify({
+                                    PartyCode: $("#ddl_Ledger_Code").val()/*, PartyCode: $("#txtMobileNo").val()*/
+
+                                }),
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (json) {
+                                    if (json) {
+                                        debugger;
+                                        $("#Contact_Person").val(json.mob).trigger('change');
+                                    }
+                                }
+                            });
+                }
+
+</script>

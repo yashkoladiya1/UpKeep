@@ -1,0 +1,408 @@
+﻿
+@{
+    ViewBag.Title = "JobCard_Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    tr.selected {
+        background-color: #B0BED9;
+    }
+
+    tr.odd.selected {
+        background-color: #B0BED9 !important;
+    }
+</style>
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Estimate / Job Card</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-md-2">
+                                <label for="Tran_ID">Tran ID</label>
+                                <input type="text" class="form-control" id="Trn_ID" disabled="disabled" placeholder="ID">
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="Milage">Milage</label>
+                                <input type="text" class="form-control formrequired" id="Milage">
+                            </div>
+
+
+                            <div class="form-group col-md-2">
+                                <label for="Invoice_Date">Invoice Date</label>
+                                <input type="text" class="form-control formrequired" id="Invoice_Date" placeholder="Date" autofocus="autofocus">
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="Tran_Date">Tran Date</label>
+                                <input type="text" class="form-control formrequired" id="Tran_Date" placeholder="Date" autofocus="autofocus">
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="Invoice_No">Invoice No</label>
+                                <input type="text" class="form-control formrequired" id="Invoice_No">
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="Challan_No">Challan No</label>
+                                <input type="text" class="form-control formrequired" id="Challan_No">
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="form-group col-md-2">
+                                <label for="Term">Term </label>
+                                <input type="text" class="form-control" id="txtTerm" placeholder="" onchange="Due_Date_Update()">
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="Due_Date">Due Date</label>
+                                <input type="text" class="form-control" id="txtDue_Date" disabled="disabled" placeholder="" autofocus="autofocus">
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="Remarks">Remarks</label>
+                                <input type="text" class="minimal" checked id="Remarks">
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="Tax_Is_Applicable">Tax is Payable on Reverse Charge?</label>
+                                <input type="checkbox" class="minimal" checked id="Tax_Is_Applicable">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <div class="form-group col-md-2">
+                        <label for="Term">Quantity</label>
+                        <input type="text" class="form-control" id="txtQTY" placeholder="">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="Term">Rate</label>
+                        <input type="text" class="form-control" id="txtRate" placeholder="">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="btnAdd"> </label>
+                        <button type="button" id="btnAdd" onclick="addRow()" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Purchase Details</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:98%; margin:0 auto;">
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                            <table id="myTable" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px;" class="table-bordered table-condensed table-striped grid">
+                                <thead class="uppercase">
+                                    <tr>
+                                        <th>RowNo</th>
+                                        <th>Item Code</th>
+                                        <th>Item Name</th>
+                                        <th>Unit</th>
+                                        <th>Qty</th>
+                                        <th>HSN</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                        <th>Disc</th>
+                                        <th>SGST Amt</th>
+                                        <th>CGST Amt</th>
+                                        <th>IGST Amt</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot style="font-size: larger;font-weight: bold;background-color: yellowgreen;"><tr><th colspan="4" style="text-align:right">Total:</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var count = 0;
+    var myTable;
+    $(document).ready(function () {
+        show_loader();
+        hide_loader();
+        $('.select2').select2();
+        $("#Invoice_Date").datepicker().datepicker("setDate", new Date());
+        $("#Tran_Date").datepicker().datepicker("setDate", new Date());
+        myTable = $('#myTable').DataTable({
+            'bFilter': false,
+            'bInfo': false,
+            'bPaginate': false,
+            "fnDrawCallback": function (row, data, start, end, display) {
+
+                var api = this.api();
+                nb_cols = api.columns().nodes().length;
+                var j = 4;
+                while (j < nb_cols) {
+                    if (j == 5 || j == 6) {
+                        j++;
+                    }
+                    else {
+                        var pageTotal = api
+                        //.column( j, { page: 'current'} )
+                        .column(j)
+                        .data()
+                        .reduce(function (a, b) {
+                            return Number(a) + Number(b);
+                        }, 0);
+                        // Update footer
+                        $(api.column(j).footer()).html(pageTotal.toFixed(2));
+                        j++;
+                    }
+                }
+            },
+            "columns": [
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      return '<center><a href="javascript:void(0);" onclick="EditDetails(' + row[1] + ',' + row[4] + ',' + row[6] + ')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                  }
+                              },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      return '<center><a href="javascript:void(0);" class="del" onclick="DeleteDetails(' + row[0] + ')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                  }
+                              }
+            ],
+            "columnDefs": [
+           {
+               "targets": [0],
+               "visible": false
+           },
+           {
+               "targets": [1],
+               "visible": false
+           }
+            ]
+        });
+
+        $('#myTable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                myTable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+// Save
+        $('#btnSave').click(function () {
+            $.ajax(
+                {
+                url: '@Url.Action("Purchase_Master_Save", "Purchase")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    Purchase_Master_ID: $("#Trn_ID").val(),
+                    Invoice_Date: $("#Invoice_Date").val(),
+                    Tran_Date: $("#Tran_Date").val(),
+                    Invoice_No: $("#Invoice_No").val(),
+                    Payment_Type: $("#ddl_Payment_Type").val(),
+                    Challan_No: $("#Challan_No").val(),
+                    Party_Code: $("#ddl_Party_Name").val(),
+                    Terms: $("#txtTerm").val(),
+                    DueDate: $("#txtDue_Date").val(),
+                    IsTaxPayable: $("#Tax_Is_Applicable").val()
+
+                }),
+                contentType: "application/json; charset=utf-8"
+
+            }).done(function (data) {
+                if (data.success) {
+                    var rowData = myTable.rows().data();
+                    rowData.each(function (value, index) {
+
+                        $.ajax({
+                            url: '@Url.Action("Purchase_Detail_Save", "Purchase")',
+                            type: "POST",
+                            dataType: "json",
+                            data: JSON.stringify({
+                                //console.log('Data in index: ' + index + ' is: ' + value);
+                                //console.log('Data in index: ' + index + ' is: ' + value[4]);
+                                Purchase_Detail_ID:0,
+                                Purchase_Master_ID: data.Purchase_ID,
+                                Item_Code: value[1],
+                                Unit: value[3],
+                                QTY: value[4],
+                                HSN: Number(value[5]),
+                                Rate: value[6],
+                                Amount: value[7],
+                                Disc: value[8],
+                                SGSTAmt: value[9],
+                                CGSTAmt: value[10],
+                                IGSTAmt: value[11]
+                               // Remarks: value[14],
+                            }),
+                            contentType: "application/json; charset=utf-8"
+                        }).done(function (data) {
+                            if (data.success) {
+                            }
+                        });
+
+                    });
+                }
+                alert(data.message);
+                Clear();
+            });
+        });
+    });
+
+    // EDIT
+    function EditDetails(Item_Code, qty, rate) {
+        alert(Item_Code);
+        $("#ddl_Item_Name").val(Item_Code).trigger("change");
+        $("#txtQTY").val(qty);
+        $("#txtRate").val(rate);
+    }
+
+    // Delete details
+    function DeleteDetails(rowNo) {
+        //alert(rowNo);
+        //$('#myTable').row(rowNo).remove().draw(false);
+
+        //myTable.row(rowNo).delete();
+    }
+
+    //Get Item
+    var unitCode = '';
+    var unitName = '';
+    var HSN = '';
+    var Rate = '';
+    function GetItemDetails() {
+        unitCode = '';
+        unitName = '';
+        HSN = '';
+        Rate = '';
+        $.ajax({
+            url: '@Url.Action("GetItemDetails", "Purchase")',
+            type: "POST",
+            async: false,
+            dataType: "json",
+            data: JSON.stringify({
+                itemCode: $("#ddl_Item_Name").val()
+            }),
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            if (data.success) {
+                unitCode = data.unitCode;
+                unitName = data.unitName;
+                HSN = data.HSN;
+                Rate = data.Rate;
+                $("#txtRate").val(data.Rate);
+            }
+        });
+    }
+    // Add Item in Row
+    function addRow() {
+        $('#myTable').dataTable().fnAddData([
+            count,
+        $("#ddl_Item_Name").val("").trigger("change"),
+        $("#ddl_Item_Name option:selected").text(),
+         unitName,
+        $("#txtQTY").val(),
+          HSN,
+        $("#txtRate").val(),
+        (Number($("#txtQTY").val()) * Number($("#txtRate").val())).toFixed(2),
+        count + "3.8",
+        count + "4.9",
+        count + "5.10",
+        count + "6.11",
+        '',
+        '']);
+        count++;
+        $("#txtQTY").val("");
+        $("#txtRate").val("");
+        document.getElementById('txtQTY').focus();
+
+    }
+
+    // Get due Date
+    function Due_Date_Update() {
+
+        var tt = document.getElementById('Invoice_Date').value;
+        var date = new Date(tt);
+        var newdate = new Date(date);
+        newdate.setDate(newdate.getDate() + parseInt(document.getElementById('txtTerm').value));
+        var dd = newdate.getDate();
+        var mm = newdate.getMonth() + 1;
+        var y = newdate.getFullYear();
+        var someFormattedDate = mm + '/' + dd + '/' + y;
+        $("#txtDue_Date").datepicker().datepicker("setDate", new Date(someFormattedDate));
+    }
+
+    // Clear
+    function Clear() {
+        $("#Trn_ID").val("");
+        $("#Invoice_Date").val("");
+        $("#Tran_Date").val("");
+        $("#Invoice_No").val("");
+        $("#ddl_Payment_Type").val("").trigger("change");
+        $("#Challan_No").val("");
+        $("#ddl_Party_Name").val("").trigger("change");
+        $("#txtTerm").val("");
+        $("#txtDue_Date").val("");
+        $("#ddl_Item_Name").val("").trigger("change");
+        $("#txtQTY").val("");
+        $("#txtRate").val("");
+        $("#btnSave").text('Save');
+        $("#btnSave").attr('class', 'btn btn-primary');
+        document.getElementById('Invoice_Date').focus();
+    }
+
+</script>
+
+

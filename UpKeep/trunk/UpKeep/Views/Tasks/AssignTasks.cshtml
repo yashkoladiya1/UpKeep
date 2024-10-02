@@ -1,0 +1,886 @@
+﻿
+@{
+    ViewBag.Title = "AssignTasks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/summernote/summernote-bs4.min.css">
+</head>
+<style>
+    label {
+        margin: 0.5em;
+    }
+</style>
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-3">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Tasks</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="Task_ID">ID</label>
+                            <input type="text" class="form-control" id="Task_ID" placeholder="ID" disabled="disabled">
+                        </div>
+                        <div class="form-group">
+                            <label for="ddl_ModuleName">Module</label>
+                            @Html.DropDownList("ddl_ModuleName", (MultiSelectList)ViewBag.ModuleList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Module", @id = "ddl_ModuleName" })@*chechkvalidation(); GetAssessment();*@
+                        </div>
+                        <div class="form-group">
+                            <label for="ddl_AssessmentName">Assessment</label>
+                            @*<select class="form-control formrequired" id="ddl_AssessmentName" onchange="GetSubAssessment();"></select>*@
+                            @Html.DropDownList("ddl_AssessmentName", (MultiSelectList)ViewBag.AssessmentList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_AssessmentName", onchange="GetSubAssessment();" })
+                        </div>
+                        <div class="form-group">
+                            <label for="ddl_SubAssessmentName">Sub Assessment</label>
+                            <select class="form-control formrequired" id="ddl_SubAssessmentName"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ddl_LocationName">Location</label>
+                            @Html.DropDownList("ddl_LocationName", (MultiSelectList)ViewBag.LocationList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Location", @id = "ddl_LocationName", @onchange = "checklocationnamne();" })
+                        </div>
+                        <div class="form-group">
+                            <label for="Task_Name">Task Name</label>
+                            <input type="text" class="form-control formrequired" autocomplete="off" id="Task_Name" placeholder="Name" autofocus="autofocus" oninput="checkPrioritfil();">
+                        </div>
+                        <div class="form-group">
+                            <label for="ddl_UserName">Assign To</label>
+                            @Html.DropDownList("ddl_UserName", (MultiSelectList)ViewBag.UserList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "User", @id = "ddl_UserName", @onchange = "checkPriorituserName();" })
+                        </div>
+                        <div class="form-group">
+                            <label for="ddl_FrequencyName">Frequency</label>
+                            @Html.DropDownList("ddl_FrequencyName", (MultiSelectList)ViewBag.FrequencyList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Frequency", @id = "ddl_FrequencyName", @onchange = "checkPrioritFrequencyName();" })
+                        </div>
+                        <div class="form-group">
+                            <label for="ddl_Priority">Priority</label>
+                            @Html.DropDownList("ddl_Priority", (MultiSelectList)ViewBag.PriorityList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Priority", @id = "ddl_Priority", @onchange = "checkPriorit();" })
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Tasks</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div>
+                        <label for="txtDescription"></label>
+                        <input type="text" class="form-control" id="txtSummernote" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtFromDate">From Date</label>
+                        <input type="text" class="form-control formrequired" id="txtFromDate" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtToDate">To Date</label>
+                        <input type="text" class="form-control formrequired" id="txtToDate" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtFromTime">From Time</label>
+                        <input type="text" class="form-control timepicker formrequired" id="txtFromTime" onchange="checkFromTime();" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtToTime">To Time</label>
+                        <input type="text" class="form-control timepicker formrequired" id="txtToTime" onchange="checkToTime();" placeholder="" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="AssessmentStatus">Active</label>
+                        <input checked="checked" id="Active" name="Status" type="radio" value="Active" style="width:35px;" />Active
+                        <input id="DeActive" name="Status" type="radio" value="DeActive" style="width:35px;" /> DeActive
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTaskImage1" class="hidden">Task_Image_1</label>
+                        <input type="text" class="hidden" id="txtTaskImage1" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTaskImage2" class="hidden">Task_Image_2</label>
+                        <input type="text" class="hidden" id="txtTaskImage2" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTaskImage3" class="hidden">Task_Image_3</label>
+                        <input type="text" class="hidden" id="txtTaskImage3" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTaskImage4" class="hidden">Task_Image_4</label>
+                        <input type="text" class="hidden" id="txtTaskImage4" placeholder="" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTaskImage5" class="hidden">Task_Image_5</label>
+                        <input type="text" class="hidden" id="txtTaskImage5" placeholder="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <input type="file" class="form-control" id="files" multiple /> @*onchange="readURL(this);"*@
+                    <br />
+                    <button type="button" id="btnUpload" class="btn btn-primary" value="Upload Files">Upload</button>
+                    <button type="button" id="btnSave" class="btn btn-primary" onclick="SaveForm()">Submit</button>
+                    <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Tasks List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:90%; margin:0 auto;">
+                        <input id="txtSearch" placeholder="General search" class="form-control" />
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+
+    </div>
+</section>
+<script src="https://adminlte.io/themes/v3/plugins/summernote/summernote-bs4.min.js"></script>
+<script>
+    $(function () {
+        //Add text editor
+        $('#txtDescription').summernote()
+    })
+</script>
+
+<script>
+    var filepath1 = '';
+    var filepath2 = '';
+    var filepath3 = '';
+    var filepath4 = '';
+    var filepath5 = '';
+    $(document).ready(function () {
+        $("#btnUpload").click(function () {
+            var fileUpload = $("#files").get(0);
+            var files = fileUpload.files;
+            console.log('TotalFile', files.length);
+            if (files.length <= 5) {
+                if (window.FormData !== undefined) {
+                    var fileUpload = $("#files").get(0);
+                    var files = fileUpload.files;
+                    var fileData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    //fileData.append('username', 'Abhi');
+                    $.ajax({
+                        url: '/Tasks/Uploads',
+                        type: "POST",
+                        contentType: false,
+                        processData: false,
+                        data: fileData,
+                        success: function (data) {
+                            if (data.success == true) {
+
+                            filepath1 = data.data1;
+                            filepath2 = data.data2;
+                            filepath3 = data.data3;
+                            filepath4 = data.data4;
+                            filepath5 = data.data5;
+                            }
+                            alert(data.msg);
+                        },
+                        error: function (err) {
+                            alert(err.statusText);
+                        }
+
+                    });
+                    //console.log('Path', filepath);
+                } else {
+                    alert("FormData is not supported in the browser.");
+                }
+            }
+            else {
+                alert("Please Select Up To 5 Image")
+            }
+        });
+    });
+
+    function GetSubAssessment() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSubAssessment")',
+            traditional: true,
+            data: JSON.stringify({
+            }),
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    //console.log(json.List)
+                    var returnValue = ``;
+                    for (var i = 0; i < json.List.length; i++) {
+                        if (json.List[i].Assessment_ID == $('#ddl_AssessmentName').val()) {
+                            returnValue = returnValue += '<option value="' + json.List[i].Sub_Assessment_ID + '">' + json.List[i].Sub_Assessment_Name + '</option>';
+                        }
+                    }
+                    $('#ddl_SubAssessmentName').html(returnValue);
+                    checkSubAssessmentName();
+                    //console.log('Data', json);
+                    //console.log('Ass', returnValue);
+                }
+            }
+        });
+    }
+
+    //$(document).ready(function () {
+    //    $("#btnUpload").click(function () {
+    //        debugger;
+    //        if (window.FormData !== undefined) {
+    //            var fileUpload = $("#files").get(0);
+    //            var files = fileUpload.files;
+    //            var fileData = new FormData();
+    //            for (var i = 0; i < files.length; i++) {
+    //                fileData.append(files[i].name, files[i]);
+    //            }
+    //            fileData.append('username', 'Abhi');
+    //            $.ajax({
+    //                url: '/Tasks/Uploads',
+    //                type: "POST",
+    //                contentType: false,
+    //                processData: false,
+    //                data: fileData,
+    //                success: function (data) {
+    //                    alert("File Upload Successfully");
+    //                    filepath1 = data.data1;
+    //                    filepath2 = data.data2;
+    //                    filepath3 = data.data3;
+    //                    filepath4 = data.data4;
+    //                    filepath5 = data.data5;
+    //                },
+    //                error: function (err) {
+    //                    alert(err.statusText);
+    //                }
+
+    //            });
+    //            //console.log('Path', filepath);
+    //        } else {
+    //            alert("FormData is not supported in the browser.");
+    //        }
+    //    });
+    //});
+
+    @*function getAssessMentData() {
+        //$('#ddl_AssessmentName').empty();
+        debugger;
+        $.ajax({
+            url: '@Url.Action("getAssessmentGetData")',
+            method: 'POST',
+            datatype: 'json',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+
+                Module_ID: $('#ddl_ModuleName').val(),
+
+            }),
+
+            success: function (json) {
+                respData.product = json.list;
+                console.log('list', respData.product);
+                $('#ddl_AssessmentName').append($('<option value="0">--Select--</option>'));
+                for (var i = 0; i < respData.product.length; i++) {
+                    //debugger;
+
+                    $('#ddl_AssessmentName').append($('<option value="' + respData.product[i].Module_ID + '">' + respData.product[i].Module_Name + '</option>'));
+                }
+            },
+
+            error: function (json) {
+
+                bootbox.alert("Error " + json)
+            }
+        });*@
+
+    //}
+
+    $(document).ready(function () {
+        $('.select2').select2();
+        $("#txtFromDate").datepicker().datepicker("setDate", new Date());
+        $("#txtToDate").datepicker().datepicker("setDate", new Date());
+        $('#btnSave').on('click');
+        show_loader();
+        display();
+        hide_loader();
+        @*$('#Task_ID').val("@ViewBag.Task_ID").trigger('change');
+        $('#ddl_ModuleName').val("@ViewBag.Module_ID").trigger('change');
+        $('#ddl_AssessmentName').val("@ViewBag.Assessment_ID").trigger('change');
+        $('#ddl_SubAssessmentName').val("@ViewBag.SubAssessment_ID").trigger('change');*@
+        var Module_IzD = '@ViewBag.Module_ID';
+        var Module_IzD = '@ViewBag.Assessment_ID';
+        if (Module_IzD != '') {
+            $('#' + Module_IzD).click();
+        }
+       // alert(Module_IzD);
+    });
+    $(function () {
+        //Add text editor
+        $('#txtSummernote').summernote()
+    })
+
+    function Clear() {
+        $("#Task_ID").val("");
+        $("#ddl_ModuleName").val("").trigger("change");
+        $("#ddl_AssessmentName").val("").trigger("change");
+        $("#ddl_SubAssessmentName").val("").trigger("change");
+        $("#ddl_LocationName").val("").trigger("change");
+        $("#ddl_UserName").val("").trigger("change");
+        $("#ddl_FrequencyName").val("").trigger("change");
+        $("#Task_Name").val("");
+        $("#txtSummernote").summernote("code", "");
+        $("#ddl_Priority").val("").trigger("change");
+        $("#txtFromDate").datepicker().datepicker("setDate", new Date());
+        $("#txtToDate").datepicker().datepicker("setDate", new Date());
+        $("#txtFromTime").datepicker().datepicker("setTime", new Date());
+        $("#txtToTime").datepicker().datepicker("setTime", new Date());
+        $("#Active").prop("checked", true);
+        $("#DeActive").prop("checked", false);
+        $("#btnSave").text('Save');
+        $("#btnSave").attr('class', 'btn btn-primary');
+        $("#files").val("");
+        document.getElementById('ddl_ModuleName').focus();
+    }
+
+    function GetFormDetails(Task_ID, Module_Id, Assessment_Id, Sub_Assessment_ID, Location_Id, Task_Name, User_Id, Frequency_Id
+        , From_Date, To_Date, From_Time, To_Time, Description, Active, priority_id, Task_Image_1, Task_Image_2, Task_Image_3, Task_Image_4
+        , Task_Image_5) {
+        debugger
+        $("#Task_ID").val(Task_ID).trigger('change'); //Assessment_Id
+        $("#ddl_ModuleName").val(Module_Id).trigger("change");        
+        $('#ddl_AssessmentName').val(Assessment_Id).trigger('change');
+        $('#ddl_SubAssessmentName').val(Sub_Assessment_ID).trigger('change');
+        $('#ddl_LocationName').val(Location_Id).trigger('change');
+        $('#ddl_UserName').val(User_Id).trigger('change');
+        $('#ddl_FrequencyName').val(Frequency_Id).trigger('change');
+        $('#ddl_Priority').val(priority_id).trigger('change');
+        $("#Active").prop("checked", Active == "1" ? true : false);
+        $("#DeActive").prop("checked", Active == "0" ? true : false);
+        $("#Task_Name").val(Task_Name);
+        $("#txtSummernote").summernote("code", Description);
+        $("#txtFromDate").val(From_Date);
+        $("#txtToDate").val(To_Date);
+        $("#txtFromTime").val(From_Time);
+        $("#txtToTime").val(To_Time);
+        //$("txtTaskImage1").val(Task_Image_1);
+        //$("txtTaskImage2").val(Task_Image_2);
+        //$("txtTaskImage3").val(Task_Image_3);
+        //$("txtTaskImage4").val(Task_Image_4);
+        //$("txtTaskImage5").val(Task_Image_5);
+        //alert(Task_Image_1);
+        filepath1 = Task_Image_1;
+        filepath2 = Task_Image_2;
+        filepath3 = Task_Image_3;
+        filepath4 = Task_Image_4;
+        filepath5 = Task_Image_5;
+
+        $("#btnSave").text('Update');
+        $("#btnSave").attr('class', 'btn btn-warning');
+        document.getElementById('ddl_ModuleName').focus();
+    }
+
+    function SaveForm() {
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("Task_SaveForm", "Tasks")',
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify({
+                    Task_ID: $("#Task_ID").val(),
+                    Module_ID: $("#ddl_ModuleName").val(),
+                    Assessment_ID: $('#ddl_AssessmentName').val(),
+                    Location_ID: $("#ddl_LocationName").val(),
+                    Sub_Assessment_ID: $("#ddl_SubAssessmentName").val(),
+                    Task_Name: $("#Task_Name").val(),
+                    Task_Login_ID: $('#ddl_UserName').val(),
+                    Description: $('#txtSummernote').summernote('code'),
+                    Login_ID: $("#ddl_UserName").val(),
+                    Frequency_ID: $("#ddl_FrequencyName").val(),
+                    Priority_ID: $("#ddl_Priority").val(),
+                    Start_Date: $("#txtFromDate").val(),
+                    End_Date: $("#txtToDate").val(),
+                    Start_Time: $("#txtFromTime").val(),
+                    End_Time: $("#txtToTime").val(),
+                    Remark: '',
+                    Flaged: '',
+                    Active: $("#Active").prop("checked"),
+                    Task_Image_1: filepath1,//$("txtTaskImage1").val(),
+                    Task_Image_2: filepath2,//$("txtTaskImage2").val(),
+                    Task_Image_3: filepath3,//$("txtTaskImage3").val(),
+                    Task_Image_4: filepath4,//$("txtTaskImage4").val(),
+                    Task_Image_5: filepath5,//$("txtTaskImage5").val(),
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    $.ajax({
+                        url: '@Url.Action("TaskTransaction_SaveForm", "Tasks")',
+                        type: "POST",
+                        async: false,
+                        async: false,
+                        dataType: "json",
+                        data: JSON.stringify({
+                            Transaction_ID: 0,
+                            Task_ID: data.TaskId,
+                            Module_ID: $("#ddl_ModuleName").val(),
+                            Start_Date: $("#txtFromDate").val(),
+                            End_Date: $("#txtToDate").val(),
+                            Schedule_ID: 0,
+                            Status_ID: 3,
+                            Remarks: '',
+                            Active: $("#Active").prop("checked")
+                        }),
+                        contentType: "application/json; charset=utf-8"
+                    }).done(function (data) {
+                        if (data.success) {
+                            Clear();
+                            //display();
+                        }
+                        //bootbox.alert(data.message);
+                    });
+                    display();
+                    Clear();
+                    //location.reload();
+                }
+                bootbox.alert(data.message);
+            });
+        }
+    }
+
+    function DeleteUserRight(taskid)
+    {
+        if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+                url: '@Url.Action("DeleteTask")',
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify({ Task_ID: taskid }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) { if (data.success) { window.location.reload(); } });
+        }
+    }
+
+
+    @*function SaveForm() {
+        debugger;
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("Task_SaveForm", "Tasks")',
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: JSON.stringify({
+                    Task_ID: $("#Task_ID").val(),
+                    Module_ID: $("#ddl_ModuleName").val(),
+                    Assessment_ID: $('#ddl_AssessmentName').val(),
+                    Location_ID: $("#ddl_LocationName").val(),
+                    Sub_Assessment_ID: $("#ddl_SubAssessmentName").val(),
+                    Task_Name: $("#Task_Name").val(),
+                    Description: $('#txtDescription').summernote('code'),
+                    Login_ID: $("#ddl_UserName").val(),
+                    Frequency_ID: $("#ddl_FrequencyName").val(),
+                    Priority_ID: $("#ddl_Priority").val(),
+                    Start_Date: $("#txtFromDate").val(),
+                    End_Date: $("#txtToDate").val(),
+                    Start_Time: $("#txtFromTime").val(),
+                    End_Time: $("#txtToTime").val(),
+                    Active: $("#Active").prop("checked"),
+                    Task_Image_1: filepath1,//$("txtTaskImage1").val(),
+                    Task_Image_2: filepath2,//$("txtTaskImage2").val(),
+                    Task_Image_3: filepath3,//$("txtTaskImage3").val(),
+                    Task_Image_4: filepath4,//$("txtTaskImage4").val(),
+                    Task_Image_5: filepath5,//$("txtTaskImage5").val(),
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    $.ajax({
+                        url: '@Url.Action("TaskTransaction_SaveForm", "Tasks")',
+                        type: "POST",
+                        async: false,
+                        async: false,
+                        dataType: "json",
+                        data: JSON.stringify({
+                            Transaction_ID: 0,
+                            Task_ID: data.TaskId,
+                            Module_ID: $("#ddl_ModuleName").val(),
+                            Start_Date: $("#txtFromDate").val(),
+                            End_Date: $("#txtToDate").val(),
+                            Schedule_ID: 0,
+                            Status_ID: 3,
+                            Remarks: '',
+                            Active: $("#Active").prop("checked")
+                        }),
+                        contentType: "application/json; charset=utf-8"
+                    }).done(function (data) {
+                        if (data.success) {
+                            Clear();
+                            //display();
+                        }
+                        //bootbox.alert(data.message);
+                    });
+                    display();
+                    Clear();
+                }
+                bootbox.alert(data.message);
+            });
+        }
+    }*@
+
+
+    function display() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetTask_List")',
+            traditional: true,
+            async:false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+                    tableHeaders += "<th>Edit</th>";
+                    tableHeaders += "<th>Delete</th>";
+                    var obj = { sTitle: "Select", orderable: false };
+                    dynamicColumns[i] = obj;
+                    i++;
+
+                    $("#gridboxmap1").empty();
+                    $("#gridboxmap1").append('<table id="tblExcelImport_Assesment" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px; white-space: nowrap;" class="table-bordered table-condensed table-striped grid"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblExcelImport_Assesment').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "bDestroy": true,
+                        "bSort": true,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                              {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      if (row[23] != "") {
+
+                                    return '<center><a href="DownloadFile?directoryFullPathInput=' + row[23].replace('E:\\Abhi\\UpKeep\\trunk\\UpKeep\\',"") +'"  id="' + row[0] + '"  style="padding:5px;"><i class="fa fa-download" style="color:#444;"></i></a></center>'
+                                      }
+                                      else {
+                                          return'<center></center>'
+                                      }
+                                    //return '<center><a href="DownloadFile?directoryFullPathInput=~/uploads/1.png" id="' + row[0] + '"  style="padding:5px;"><i class="fa fa-download" style="color:#444;"></i></a></center>'
+                                  //  return '<center><a href="DownloadFile?directoryFullPathInput=' + row[23].replace("E:", "").replace("Abhi", "").replace("UpKeep", "").replace("trunk", "").replace("Uploads", "")+'"  id="' + row[0] + '"  style="padding:5px;"><i class="fa fa-download" style="color:#444;"></i></a></center>'
+
+                                }
+                              },
+                              {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      if (row[24] != "") {
+                                          return '<center><a href="DownloadFile?directoryFullPathInput=' + row[24].replace('E:\\Abhi\\UpKeep\\trunk\\UpKeep\\', "") + '"  id="' + row[0] + '"  style="padding:5px;"><i class="fa fa-download" style="color:#444;"></i></a></center>'
+                                      }
+                                      else {
+                                          return '<center></center>'
+                                      }
+                                }
+                              },
+                              {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      if (row[25] != "") {
+                                          return '<center><a href="DownloadFile?directoryFullPathInput=' + row[25].replace('E:\\Abhi\\UpKeep\\trunk\\UpKeep\\', "") + '"  id="' + row[0] + '"  style="padding:5px;"><i class="fa fa-download" style="color:#444;"></i></a></center>'
+                                      }
+                                      else {
+                                          return '<center></center>'
+                                      }
+                                }
+                              },
+                              {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      if (row[26] != "") {
+                                          return '<center><a href="DownloadFile?directoryFullPathInput=' + row[26].replace('E:\\Abhi\\UpKeep\\trunk\\UpKeep\\', "") + '"  id="' + row[0] + '"  style="padding:5px;"><i class="fa fa-download" style="color:#444;"></i></a></center>'
+                                      }
+                                      else {
+                                          return '<center></center>'
+                                      }
+                                }
+                              },
+                              {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      if (row[27] != "") {
+                                          return '<center><a href="DownloadFile?directoryFullPathInput=' + row[27].replace('E:\\Abhi\\UpKeep\\trunk\\UpKeep\\', "") + '"  id="' + row[0] + '"  style="padding:5px;"><i class="fa fa-download" style="color:#444;"></i></a></center>'
+                                      }
+                                      else {
+                                          return '<center></center>'
+                                      }
+                                }
+                              },
+                              {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    //return '<center><a href="javascript:void(0);" id="' + row[0] + '" onclick="GetFormDetails(' + row[0] + ',\'' + row[1] + '\',\'' + row[3] + '\',\'' + row[7] + '\',\'' + row[5] + '\',\'' + row[9] + '\',\'' + row[11] + '\',\'' + row[13] + '\',\'' + row[15] + '\',\'' + row[16] + '\',\'' + row[17] + '\',\'' + row[18] + '\',\'' + row[10] + '\',' + row[19] + ',\'' + row[21] + '\')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                    return '<center><a href="javascript:void(0);" onclick="GetFormDetails(' + row[0] + ',\'' + row[1] + '\',\'' + row[3] + '\',\'' + row[7] + '\',\'' + row[5] + '\',\'' + row[9] + '\',\'' + row[11] + '\',\'' + row[13] + '\',\'' + row[15] + '\',\'' + row[16] + '\',\'' + row[17] + '\',\'' + row[18] + '\',\'' + row[10] + '\',' + row[19] + ',\'' + row[21] + '\',\'' + row[23] + '\',\'' + row[24] + '\',\'' + row[25] + '\',\'' + row[26] + '\',\'' + row[27] + '\')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                }
+                              },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      return '<center><a href="javascript:void(0);" onclick="DeleteUserRight(' + row[0] + ',\'' + row[1] + '\',\'' + row[3] + '\',\'' + row[7] + '\',\'' + row[5] + '\',\'' + row[9] + '\',\'' + row[11] + '\',\'' + row[13] + '\',\'' + row[15] + '\',\'' + row[16] + '\',\'' + row[17] + '\',\'' + row[18] + '\',\'' + row[10] + '\',' + row[19] + ',\'' + row[21] + '\',\'' + row[23] + '\',\'' + row[24] + '\',\'' + row[25] + '\',\'' + row[26] + '\',\'' + row[27] + '\')" style="padding:5px;"><i class="fa fa-trash" style="color:#444;"></i></a></center>'
+                                  }
+                              }
+
+                        ],
+                        "columnDefs": [
+                            //{ "targets": [0], "visible": false },
+                            { "targets": [1], "visible": false },
+                            { "targets": [3], "visible": false },
+                            { "targets": [5], "visible": false },
+                            { "targets": [7], "visible": false },
+                            { "targets": [11], "visible": false },
+                            { "targets": [13], "visible": false }
+                        ]
+                    });
+                    $('#tblExcelImport_Assesment_filter').hide();
+                    $('#txtSearch').on('keyup', function () {
+                        $('#tblExcelImport_Assesment')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                    $('#txtSearch').on('change', function () {
+                        $('#tblExcelImport_Assesment')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+
+        });
+    }
+
+    function ValidateDropdown() {
+        var result = document.getElementById('ddl_SubAssessmentName').value;
+        var result1 = document.getElementById('Task_Name').value;
+        if (result == "") {
+            alert("Please Select SubAssessment Name");
+        }
+        else if (result1 == "") {
+            alert("Please Enter Task Name");
+        }
+        else
+        {
+            SaveForm();
+        }
+    }
+
+    function chechkvalidation() {
+        var modulename = $('#ddl_ModuleName').val();
+        if (modulename != "") {
+            $('#ddl_ModuleName').css("background-color", "");
+            $('#ddl_ModuleName').css("border", "");
+        }
+    }
+
+    function checkname() {
+        var name = $('#ddl_AssessmentName').val();
+        if (name != "" || name != null) {
+            $('#ddl_AssessmentName').css("background-color", "");
+            $('#ddl_AssessmentName').css("border", "");
+        }
+    }
+
+    function checkSubAssessmentName() {
+        var SubAssessmentName = $('#ddl_SubAssessmentName').val();
+        if (SubAssessmentName != null || SubAssessmentName != "") {
+            $('#ddl_SubAssessmentName').css("background-color", "");
+            $('#ddl_SubAssessmentName').css("border", "");
+
+        }
+    }
+
+    function checklocationnamne() {
+        var locationnamne = $('#ddl_LocationName').val();
+        if (locationnamne != null || locationnamne != "") {
+            $('#ddl_LocationName').css("background-color", "");
+            $('#ddl_LocationName').css("border", "");
+
+        }
+    }
+
+    function checkPriorituserName() {
+        var username = $('#ddl_UserName').val();
+        if (username != null || username != "") {
+            $('#ddl_UserName').css("background-color", "");
+            $('#ddl_UserName').css("border", "");
+
+        }
+    }
+
+    function checkPrioritFrequencyName() {
+        var FrequencyName = $('#ddl_FrequencyName').val();
+        if (FrequencyName != null || FrequencyName != "") {
+            $('#ddl_FrequencyName').css("background-color", "");
+            $('#ddl_FrequencyName').css("border", "");
+
+        }
+    }
+    function checkPriorit() {
+        var Priorit = $('#ddl_Priority').val();
+        if (Priorit != null || Priorit != "") {
+            $('#ddl_Priority').css("background-color", "");
+            $('#ddl_Priority').css("border", "");
+
+        }
+    }
+
+    function checkPrioritfil() {
+        var taskname = $('#Task_Name').val();
+        if (taskname != null || taskname != "") {
+            $('#Task_Name').css("background-color", "");
+            $('#Task_Name').css("border", "");
+
+        }
+    }
+    function checkFromTime() {
+        var FromTime = $('#txtFromTime').val();
+        if (FromTime != null || FromTime != "") {
+            $('#txtFromTime').css("background-color", "");
+            $('#txtFromTime').css("border", "");
+
+        }
+    }
+    function checkToTime() {
+        var ToTime = $('#txtToTime').val();
+        if (ToTime != null || ToTime != "") {
+            $('#txtToTime').css("background-color", "");
+            $('#txtToTime').css("border", "");
+
+        }
+    }
+</script>

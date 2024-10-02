@@ -1,0 +1,249 @@
+﻿
+@{
+    ViewBag.Title = "WeekllyOff_Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">WeekllyOff Master</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="WeekllyOff_ID">ID</label>
+                            <input type="number" class="form-control" disabled="disabled" id="WeekllyOff_ID" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="WeekllyOff_Day">Name</label>
+                            <input type="text" class="form-control formrequired" id="WeekllyOff_Day" placeholder="Name" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="WeekllyOffStatus">Active</label>
+                            <input checked="checked" id="Active" name="Status" type="radio" value="Active" style="width:35px;" />Active
+                            <input id="DeActive" name="Status" type="radio" value="DeActive" style="width:35px;" /> DeActive
+                        </div>
+                        <div class="form-group">
+                            <label for="Remark">Remark</label>
+                            <input type="text" class="form-control" id="Remark" placeholder="Remark">
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary" onclick="SaveForm()">Save</button>
+                        <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">WeekllyOff List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:90%; margin:0 auto;">
+                        <input id="txtSearch" placeholder="General search" class="form-control" />
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        show_loader();
+        display();
+        hide_loader();
+    });
+
+    //$('#demoGrid').DataTable({
+    //});
+
+    function Clear() {
+        $("#WeekllyOff_ID").val("");
+        $("#WeekllyOff_Day").val("");
+        $("#Remark").val("");
+        $("#Active").prop("checked", true);
+        $("#DeActive").prop("checked", false);
+        $("#btnSave").text('Save');
+        $("#btnSave").attr('class', 'btn btn-primary');
+        document.getElementById('WeekllyOff_Day').focus();
+    }
+
+    function GetFormDetails(WeekllyOff_ID, WeekllyOff_Day, Active, Remark) {
+        $("#WeekllyOff_ID").val(WeekllyOff_ID);
+        $("#WeekllyOff_Day").val(WeekllyOff_Day);
+        //$("#Active").val(Active).trigger('change');
+        $("#Active").prop("checked", Active == "1" ? true : false);
+        $("#DeActive").prop("checked", Active == "0" ? true : false);
+        $("#Remark").val(Remark);
+        $("#btnSave").text('Update');
+        $("#btnSave").attr('class', 'btn btn-warning');
+        document.getElementById('WeekllyOff_Day').focus();
+    }
+
+    function SaveForm() {
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("WeekllyOff_SaveForm", "Master")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    WeekllyOff_ID: $("#WeekllyOff_ID").val(),
+                    WeekllyOff_Day: $("#WeekllyOff_Day").val(),
+                    Active: $("#Active").prop("checked"),
+                    Remark: $("#Remark").val()
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    Clear();
+                    display();
+                }
+                bootbox.alert(data.message);
+            });
+        }
+    }
+
+    function display() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetWeekllyOff_List")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+
+                    tableHeaders += "<th>Edit</th>";
+                    var obj = { sTitle: "Select", orderable: false };
+                    dynamicColumns[i] = obj;
+                    i++;
+
+                    $("#gridboxmap1").empty();
+                    $("#gridboxmap1").append('<table id="tblExcelImport_WeeklyOff" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px; white-space: nowrap;" class="table-bordered table-condensed table-striped grid"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblExcelImport_WeeklyOff').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "bDestroy": true,
+                        "bSort": true,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                              { "sWidth": "5%" },
+                              { "sWidth": "50%" },
+                              { "sWidth": "10%" },
+                              { "sWidth": "35%" },
+                              {
+                                  "bSortable": false,
+                                  "sWidth": "1%",
+                                  "render": function (data, type, row, meta) {
+                                      return '<center><a href="javascript:void(0);" onclick="GetFormDetails(' + row[0] + ',\'' + row[1] + '\',' + row[2] + ',\'' + row[3] + '\')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                  }
+                              }
+                        ],
+                        "columnDefs": [
+           {
+               "targets": [0],
+               "visible": false
+           }
+                        ]
+                    });
+                    $('#tblExcelImport_WeeklyOff_filter').hide();
+                    $('#txtSearch').on('keyup', function () {
+                        $('#tblExcelImport_WeeklyOff')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                    $('#txtSearch').on('change', function () {
+                        $('#tblExcelImport_WeeklyOff')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+
+    //function GetFormDetails(Country_ID, Country_Name,Active,Remark) {
+    //    $("#CountryID").val(Country_ID);
+    //    $("#Country_Name").val(Country_Name);
+    //    $("#Remark").val(Remark);
+    //}
+</script>

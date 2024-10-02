@@ -1,0 +1,255 @@
+﻿
+@{
+    ViewBag.Title = "Attendance_Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Attendance Report</h3>
+                </div>
+                <form role="form">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="ddlUser">User</label>
+                                    @*<select class="form-control select2" id="ddlUser"></select>*@
+                                    @Html.DropDownList("ddlUser", (MultiSelectList)ViewBag.UserList, new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddlUser" })    @*, @onchange = "display();"*@
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="txtFromDate">From Date</label>
+                                    <input type="date" id="txtFromDate" class="form-control" @*onchange="endOfMonth()"*@>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="txtToDate">To Date</label>
+                                    <input type="date" id="txtToDate" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <button type="button" class="btn btn-primary" onclick="display();">GetData</button>
+                            </div>
+                        </div>&nbsp;&nbsp;&nbsp;
+                        <div class="card-body">
+                            <div class="col-12" style="overflow: auto;">
+                                <table id="tblAttendanceReport" class="table table-bordered table-striped" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Employee Code</th>
+                                            <th>Full Name</th>
+                                            <th>Department</th>
+                                            <th>Designation</th>
+                                            <th>Default Shift</th>
+                                            <th>1</th>
+                                            <th>2</th>
+                                            <th>3</th>
+                                            <th>4</th>
+                                            <th>5</th>
+                                            <th>6</th>
+                                            <th>7</th>
+                                            <th>8</th>
+                                            <th>9</th>
+                                            <th>10</th>
+                                            <th>11</th>
+                                            <th>12</th>
+                                            <th>13</th>
+                                            <th>14</th>
+                                            <th>15</th>
+                                            <th>16</th>
+                                            <th>17</th>
+                                            <th>18</th>
+                                            <th>19</th>
+                                            <th>20</th>
+                                            <th>21</th>
+                                            <th>22</th>
+                                            <th>23</th>
+                                            <th>24</th>
+                                            <th>25</th>
+                                            <th>26</th>
+                                            <th>27</th>
+                                            <th>28</th>
+                                            <th>29</th>
+                                            <th>30</th>
+                                            <th>31</th>
+                                            <th>Total Hour</th>
+                                            <th>Final Total</th>
+                                            <th>Total Present</th>
+                                            <th>Total Half</th>
+                                            <th>Total Apsent</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+
+    $(document).ready(function () {
+        if (@UpKeep.Utility.SessionDetails.UserSession.Login_ID != 1) {
+            @*alert(@ViewBag.UserList.Items[0].Login_ID);*@
+              //$("#ddlUser").val("@ViewBag.UserList.Items[0].Login_ID").trigger('change');
+            $("#ddlUser").attr("disabled", "disabled");
+        }
+    });
+
+    async function display()
+    {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Get_Attendance_Report")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            data: JSON.stringify({
+                EmpID: $('#ddlUser').val() == "" ? 0 : $('#ddlUser').val(),
+                from_date: $('#txtFromDate').val() == "" ? null : $('#txtFromDate').val(),
+                to_date: $('#txtToDate').val() == "" ? null : $('#txtToDate').val(),
+            }),
+            success: function (json) {
+                if(json) {
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value)
+                    {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value)
+                        {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+                        i++;
+                    });
+
+                    var oTable = $('#tblAttendanceReport').DataTable({
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        "bSort": true,
+                        "aaData": rowDataSet,
+                        "bDestroy": true,
+                        "columns": [
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" }
+                        ],
+                        "columnDefs": [
+                        ]
+                    });
+
+
+                    var ccnt = 0;
+                    $("#tblAttendanceReport tbody tr:nth-child(1) td").each(function () {
+                        ccnt++;
+                        if (ccnt > 6 && ccnt < 38) {
+                            //if (ccnt > 6 && $(this).html() > '09:15') {
+                            if ($(this).html() > '09:15') {
+                                $(this).css('color', 'Red');
+                            }
+                        }
+                    });
+
+                    var cnt = 0; datecnt = -1;
+                    $("#tblAttendanceReport tbody tr:nth-child(2) td").each(function () {
+                        //alert($(this).html());
+                        cnt++;
+                        if (cnt > 6 && cnt < 38) {
+                            datecnt++;
+                            //alert(cnt);
+                            var start = new Date($("#txtFromDate").val());
+                            var loop = new Date(start);
+                            var newDate = loop.setDate(loop.getDate() + datecnt);
+                            loop = new Date(newDate);
+                            //alert(loop);
+                            const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                            let day = weekday[loop.getDay()];
+                            //alert(day);
+                            if (day != 'Sunday') {
+                                if ($(this).html() < '08:30') {
+                                    $(this).css('color', 'Red');
+                                }
+                            }
+                        }
+                    });
+
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+
+    //display();
+
+  
+    $('#txtFromDate').on('change', function () {
+      
+            const from_date = new Date($(this).val());
+
+            const last_date = new Date(from_date.getFullYear(), from_date.getMonth() + 1, 0).getDate();
+
+            const to_date = `${from_date.getFullYear()}-${(from_date.getMonth() + 1).toString().padStart(2, '0')}-${last_date.toString().padStart(2, '0')}`;
+
+     
+            $('#txtToDate').val(to_date);
+        });
+
+   
+
+
+
+
+</script>

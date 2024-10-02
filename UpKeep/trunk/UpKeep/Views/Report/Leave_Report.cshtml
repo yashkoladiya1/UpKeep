@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "Leave_Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Leave Report</h3>
+                </div>
+                <form role="form">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="ddlUser">User</label>
+                                    @*<select class="form-control select2" id="ddlUser"></select>*@
+                                    @Html.DropDownList("ddlUser", (MultiSelectList)ViewBag.UserList, new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddlUser" })    @*, @onchange = "display();"*@
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="txtFromDate">From Date</label>
+                                    <input type="date" id="txtFromDate" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="txtToDate">To Date</label>
+                                    <input type="date" id="txtToDate" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <button type="button" class="btn btn-primary" onclick="display();">GetData</button>
+                            </div>
+                        </div>&nbsp;&nbsp;&nbsp;
+                        <div class="card-body">
+                            <div class="col-12" style="overflow: auto;">
+                                <table id="tblLeaveReport" class="table table-bordered table-striped" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee Leave ID</th>
+                                            <th>User Name</th>
+                                            <th>Leave Date</th>
+                                            <th>Leave Reason</th>
+                                            <th>Leave Type</th>
+                                            <th>Active</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    
+    @*$(document).ready(function () {
+        debugger
+        if (@UpKeep.Utility.SessionDetails.UserSession.Login_ID != 1) {
+            @*alert(@ViewBag.UserList.Items[0].Login_ID);*@
+            @*$("#ddlUser").val("@ViewBag.UserList.Items[0].Login_ID").trigger('change');*@
+            //  $("#ddlUser").attr("disabled", "disabled");
+        @*}
+    });*@
+    
+    async function display()
+    {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Get_Leave_Report")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            data: JSON.stringify({
+                User_Id: $('#ddlUser').val() == "" ? 0 : $('#ddlUser').val(),
+                from_date: $('#txtFromDate').val() == "" ? null : $('#txtFromDate').val(),
+                to_date: $('#txtToDate').val() == "" ? null : $('#txtToDate').val(),
+            }),
+            success: function (json) {
+                if(json) {
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value)
+                    {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value)
+                        {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+                        i++;
+                    });
+                    
+                    var oTable = $('#tblLeaveReport').DataTable({
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        "bSort": true,
+                        "aaData": rowDataSet,
+                        "bDestroy": true,
+                        "columns": [
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" }
+                        ],
+                        "columnDefs": [
+                        ]
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+
+    $('#txtFromDate').on('change', function () {
+       
+        const from_date = new Date($(this).val());
+
+        const last_date = new Date(from_date.getFullYear(), from_date.getMonth() + 1, 0).getDate();
+
+        const to_date = `${from_date.getFullYear()}-${(from_date.getMonth() + 1).toString().padStart(2, '0')}-${last_date.toString().padStart(2, '0')}`;
+
+
+        $('#txtToDate').val(to_date);
+    });
+
+</script>
+

@@ -1,0 +1,344 @@
+﻿
+@{
+    ViewBag.Title = "Item_Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<section class="content">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Item Detail</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="Item_Detail_ID">ID</label>
+                            <input type="text" class="form-control" disabled="disabled" id="Item_Detail_ID" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="Item_Code">Item Name</label>
+                            @*<input type="text" class="form-control" id="Item_Code" placeholder="ID">*@
+                            @Html.DropDownList("ddl_Item_Code", (MultiSelectList)ViewBag.FormItemList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Display Name", @id = "ddl_Item_Code", @onchange="chehckvalidation();" })
+
+
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="Location_Code">Location Name</label>
+                            @*<input type="text" class="form-control" id="Location_Code" placeholder="ID" autofocus="autofocus">*@
+                            @Html.DropDownList("ddl_Location_Code", (MultiSelectList)ViewBag.FormLocationList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Display Name", @id = "ddl_Location_Code" , @onchange = "chechloaction();" })
+
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Reorder_Level">Reorder Level</label>
+                            <input type="text" class="form-control" id="Reorder_Level" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Maximum_Reorder_Period">Maximum Reorder Period</label>
+                            <input type="text" class="form-control" id="Maximum_Reorder_Period" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Maximum_Consumption">Maximum Consumption</label>
+                            <input type="text" class="form-control" id="Maximum_Consumption" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="Noofdaysofstock">No of days of stock</label>
+                            <input type="text" class="form-control" id="Noofdaysofstock" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="Ordring_Qty">Ordring Qty</label>
+                            <input type="text" class="form-control" id="Ordring_Qty" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Fin_Year_Code">Fin Year Code</label>
+                            <input type="text" class="form-control" id="Fin_Year_Code" autofocus="autofocus">
+                        </div>
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary" onclick="SaveForm()">Save</button>
+                        <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Item Detail List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:90%; margin:0 auto;">
+                        <input id="txtSearch" placeholder="General search" class="form-control" />
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        show_loader();
+        display();
+        hide_loader();
+    });
+
+    //$('#demoGrid').DataTable({
+    //});
+
+    function Clear() {
+        $("#Item_Detail_ID").val("");
+        $("#ddl_Item_Code").val("").trigger("change");
+        $("#ddl_Location_Code").val("").trigger("change");
+        $("#Reorder_Level").val("");
+        $("#Maximum_Reorder_Period").val("");
+        $("#Maximum_Consumption").val("");
+        $("#Noofdaysofstock").val("");
+        $("#Ordring_Qty").val("");
+        $("#Fin_Year_Code").val("");
+        $("#btnSave").text('Save');
+        $("#btnSave").attr('class', 'btn btn-primary');
+        document.getElementById('ddl_Item_Code').focus();
+    }
+
+    function GetFormDetails(Item_Detail_ID, Item_Code, Item_Name,Location_Code,Location_Name, Reorder_Level, Maximum_Reorder_Period, Maximum_Consumption, Noofdaysofstock, Ordring_Qty, Fin_Year_Code) {
+        $("#Item_Detail_ID").val(Item_Detail_ID);
+        $("#ddl_Item_Code").val(Item_Code).trigger("change");
+        $("#ddl_Location_Code").val(Location_Code).trigger("change");
+        $("#Reorder_Level").val(Reorder_Level);
+        $("#Maximum_Reorder_Period").val(Maximum_Reorder_Period);
+        $("#Maximum_Consumption").val(Maximum_Consumption);
+        $("#Noofdaysofstock").val(Noofdaysofstock);
+        $("#Ordring_Qty").val(Ordring_Qty);
+        $("#Fin_Year_Code").val(Fin_Year_Code);
+        $("#btnSave").text('Update');
+        $("#btnSave").attr('class', 'btn btn-warning');
+        document.getElementById('ddl_Item_Code').focus();
+    }
+
+    function SaveForm() {
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("Item_Detail_SaveForm", "Master")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+
+
+                        Item_Detail_ID: $("#Item_Detail_ID").val(), Item_Code: $("#ddl_Item_Code").val(),
+                       Location_Code: $("#ddl_Location_Code").val(),
+                        Reorder_Level: $("#Reorder_Level").val(), Maximum_Reorder_Period: $("#Maximum_Reorder_Period").val(),
+                        Maximum_Consumption: $("#Maximum_Consumption").val(), Noofdaysofstock: $("#Noofdaysofstock").val(),
+                        Ordring_Qty: $("#Ordring_Qty").val(), Fin_Year_Code: $("#Fin_Year_Code").val(),
+
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    Clear();
+                    display();
+                }
+                bootbox.alert(data.message);
+            });
+        }
+    }
+
+    function display() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetItem_Detail_List")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+
+                    tableHeaders += "<th>Edit</th>";
+                    var obj = { sTitle: "Select", orderable: false };
+                    dynamicColumns[i] = obj;
+                    i++;
+
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+                    
+
+                    $("#gridboxmap1").empty();
+                    $("#gridboxmap1").append('<table id="tblExcelImport_ItemDetail" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px;white-space: nowrap;" class="table-bordered table-condensed table-striped grid"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 1;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblExcelImport_ItemDetail').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "bDestroy": true,
+                        "bSort": true,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    return '<center><a href="javascript:void(0);" onclick="GetFormDetails(' + row[1] + ',' + row[2] + ',\'' + row[3] + '\',' + row[4] + ',\'' + row[5] + '\',' + row[6] + ',' + row[7] + ',' + row[8] + ',' + row[9] + ',' + row[10] + ',' + row[11] + ')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                }
+                            },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                               { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                               { "sWidth": "1%" },
+
+                              
+                        ],
+                        "columnDefs": [
+           {
+               "targets": [1],
+               "visible": false
+           },
+                        {
+               "targets": [2],
+                        "visible": false
+                        },
+                        {
+               "targets": [4],
+                        "visible": false
+                    }
+                         
+                        ]
+                    });
+                    $('#tblExcelImport_ItemDetail_filter').hide();
+                    $('#txtSearch').on('keyup', function () {
+                        $('#tblExcelImport_ItemDetail')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                    $('#txtSearch').on('change', function () {
+                        $('#tblExcelImport_ItemDetail')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    };
+
+
+    $(function () {
+        $("#Start_Date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+0",
+            dateFormat: 'dd-M-yy'
+        });
+    });
+
+    $(function () {
+        $("#End_Date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+0",
+            dateFormat: 'dd-M-yy'
+        });
+
+    });
+
+    function chehckvalidation() {
+        var temcode = $('#ddl_Item_Code').val();
+        if (temcode != "") {
+            $('#ddl_Item_Code').css("background-color", "");
+            $('#ddl_Item_Code').css("border", "");
+        }
+    }
+    function chechloaction() {
+        var locationcode = $('#ddl_Location_Code').val();
+           if (locationcode != "") {
+            $('#ddl_Location_Code').css("background-color", "");
+            $('#ddl_Location_Code').css("border", "");
+            return true;
+        }
+    }
+</script>
+
+
+
+

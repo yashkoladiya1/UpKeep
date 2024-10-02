@@ -1,0 +1,787 @@
+﻿@using UpKeep
+@using UpKeep.Utility
+@if (SessionDetails.ClientSession == null)
+{
+    Session.Abandon();
+    Response.Redirect(Url.Action("Login", "Home"));
+    return;
+}
+@using System.Data
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<title>@if (SessionDetails.ClientSession != null) { @new string{} }</title>*@
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="~/plugins/timepicker/bootstrap-timepicker.min.css">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="~/bower_components/jvectormap/jquery-jvectormap.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="~/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="~/plugins/iCheck/all.css">
+
+    <link rel="stylesheet" href="~/bower_components/select2/dist/css/select2.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="~/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+
+
+
+    <!-- jQuery 3 -->
+    <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+    @*<!-- jQuery UI 1.11.4 -->
+        <script src="~/bower_components/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+            $.widget.bridge('uibutton', $.ui.button);
+        </script>*@
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/bower_components/fastclick/lib/fastclick.js"></script>
+    <!-- Select2 -->
+    <script src="~/bower_components/select2/dist/js/select2.full.min.js"></script>
+    <!-- bootstrap time picker -->
+    <script src="~/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- Sparkline -->
+    <script src="~/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- jvectormap  -->
+    <script src="~/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="~/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- SlimScroll -->
+    <script src="~/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- ChartJS -->
+    <script src="~/bower_components/chart.js/Chart.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    @*<script src="~/dist/js/pages/dashboard2.js"></script>*@
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/dist/js/demo.js"></script>
+
+    <!-- InputMask -->
+    <script src="~/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="~/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="~/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="~/plugins/input-mask/jquery.inputmask.numeric.extensions.js"></script>
+
+    <!-- DataTables -->
+    <script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+
+    <link href="~/dist/css/Ani.css" rel="stylesheet" />
+
+
+    <script src="~/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+
+    <!-- iCheck 1.0.1 -->
+    <script src="~/plugins/iCheck/icheck.min.js"></script>
+    <script src="~/dist/js/bootbox.min.js"></script>
+
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <section class="wrapper">
+
+        <header class="main-header">
+
+            <!-- Logo -->
+            <a href="Dashboard" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">
+                    <img src="~/Images/Logo_mini.png" style="width:30px;" />
+                </span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+                    <img src="~/Images/Logo.png" style="width:200px;" />
+                </span>
+            </a>
+
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="@(String.Format("{0}{1}{2}", @SessionDetails.ClientSession.Logo_Path.Replace("Logo.png", "Users/").ToString(), @SessionDetails.UserSession.Login_ID.ToString(), ".jpg"))" class="user-image" style="object-fit:cover;" alt="User Image">
+                                @*<img src="@SessionDetails.ClientSession.Logo_Path.Replace("Logo.png","Users/").ToString() + @SessionDetails.UserSession.Login_ID.ToString() + '.jpg'" class="user-image" alt="User Image">*@
+                                @*<i class="fa fa-user-circle-o user-image fa-lg" aria-hidden="true"></i>*@
+                                <span class="hidden-xs">@SessionDetails.UserSession.UserName</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="@(String.Format("{0}{1}{2}", @SessionDetails.ClientSession.Logo_Path.Replace("Logo.png", "Users/").ToString(), @SessionDetails.UserSession.Login_ID.ToString(), ".jpg"))" class="img-circle" style="object-fit:cover;" alt="User Image">
+                                    @*<i class="fa fa-user-circle-o img-circle fa-5x" aria-hidden="true"></i>*@
+                                    <p>
+                                        @SessionDetails.UserSession.UserName
+                                        @*Alexander Pierce - Web Developer*@
+                                        <small>@SessionDetails.UserSession.EmailID</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    @*<div class="pull-left">
+                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        </div>*@
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("Logout", "Home")" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- /.search form -->
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    @if (((DataTable)Session["ModuleTable"]).Select("Module_ID = 6").Count() > 0)
+                    {
+                        <li class="treeview" id="dashboard">
+                            <a href="#">
+                                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'DashBoard' AND Module_ID = 6").Count() > 0)
+                                {
+                                    <li><a href="~/Home/DashBoard" onclick="SetMenuInSession('Dashboard')"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+
+                    }
+                    @if (((DataTable)Session["ModuleTable"]).Select("Module_ID = 9 OR Module_ID = 10 OR Module_ID = 11 OR Module_ID = 12 OR Module_ID = 13").Count() > 0)
+                    {
+                        <li class="treeview" id="tasks">
+                            <a href="#">
+                                <i class="fa fa-list-ul"></i>Tasks
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="treeview" id="Masters">
+                                    <a href="#">
+                                        <i class="fa fa-list-ul"></i>Master
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Assessment_Master' AND Module_ID = 9").Count() > 0)
+                                        {
+                                            <li><a href="~/Master/Assessment_Master" onclick="SetMenuInSession('Master')"><i class="fa fa-circle-o"></i> Assessment Master</a></li>
+                                        }
+                                        @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Sub_Assessment_Master' AND Module_ID = 10 ").Count() > 0)
+                                        {
+                                            <li><a href="~/Master/Sub_Assessment_Master" onclick="SetMenuInSession('Master')"><i class="fa fa-circle-o"></i> Sub Assessment Master</a></li>
+                                        }
+                                        @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Frequency_Master' AND Module_ID = 11").Count() > 0)
+                                        {
+                                            <li><a href="~/Master/Frequency_Master" onclick="SetMenuInSession('Master')"><i class="fa fa-circle-o"></i> Frequency Master</a></li>
+                                        }
+                                        @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Work_Status_Master' AND Module_ID = 12 ").Count() > 0)
+                                        {
+                                            <li><a href="~/Master/Work_Status_Master" onclick="SetMenuInSession('Master')"><i class="fa fa-circle-o"></i> Work Status Master</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                                @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'AssignTasks' AND Module_ID = 13 ").Count() > 0)
+                                {
+                                    <li id="assigntasks" onclick="SetMenuInSession('Tasks')"><a href="~/Tasks/AssignTasks"><i class="fa fa-circle-o"></i>Assign Tasks</a></li>
+                                }
+                            </ul>
+
+                        </li>
+
+                    }
+                    else
+                    {
+
+                    }
+                    @if (((DataTable)Session["ModuleTable"]).Select("Module_ID = 16 OR Module_ID = 18 OR Module_ID = 14 OR Module_ID = 19 OR Module_ID = 15  OR Module_ID = 17 OR Module_ID = 21 OR Module_ID = 20 OR Module_ID = 22  OR Module_ID = 23 OR Module_ID = 24 OR Module_ID = 25").Count() > 0)
+                    {
+                        <li class="treeview" id="reports">
+                            <a href="#">
+                                <i class="fa fa-list-ul"></i>Reports
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Task_Report' AND Module_ID = 56 ").Count() > 0)
+                                {
+                                    <li id="Task_Report" onclick="SetMenuInSession('Reports')"><a href="~/Report/Task_Report"><i class="fa fa-circle-o"></i>Task Report</a></li>
+                                }
+                            </ul>
+
+                        </li>
+                    }
+                    else
+                    {
+
+                    }
+                    @if (((DataTable)Session["ModuleTable"]).Select("Module_ID = 26 OR Module_ID = 27 OR Module_ID = 28 OR Module_ID = 29 OR Module_ID = 30 OR Module_ID = 31 OR Module_ID = 32 OR Module_ID = 33  OR Module_ID = 34 OR Module_ID = 35 OR Module_ID = 36 OR Module_ID = 37  OR Module_ID = 38 OR Module_ID = 39 OR Module_ID = 40 OR Module_ID = 41 OR Module_ID = 42 OR Module_ID = 43 OR Module_ID = 44 OR Module_ID = 45 OR Module_ID = 46 OR Module_ID = 47 OR Module_ID = 48  OR Module_ID = 49 OR Module_ID = 50 OR Module_ID = 51 OR Module_ID = 52").Count() > 0)
+                    {
+                        <li class="treeview" id="masters">
+                            <a href="#">
+                                <i class="fa fa-list-ul"></i>
+                                <span>Masters</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @if (((DataTable)Session["ModuleTable"]).Select("Module_ID = 34 OR Module_ID = 35 OR Module_ID = 36 OR Module_ID = 37  OR Module_ID = 38 OR Module_ID = 39 OR Module_ID = 40 OR Module_ID = 41").Count() > 0)
+                                {
+                                    <li class="treeview" id="common">
+                                        <a href="#">
+                                            <i class="fa fa-list-ul"></i>Common
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'UserMaster' AND Module_ID = 34 ").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/UserMaster" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>Users</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Company_Master' AND Module_ID = 35 ").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Company_Master" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>Company</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Branch_Master' AND Module_ID = 36 ").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Branch_Master" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>Branch</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Location_Master' AND Module_ID = 37 ").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Location_Master" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>Location</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Country_Master' AND Module_ID = 38 ").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Country_Master" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>Country</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'State_Master' AND Module_ID = 39 ").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/State_Master" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>State</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'City_Master' AND Module_ID = 40").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/City_Master" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>City</a></li>
+}
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Financial_Year_Master' AND Module_ID = 41").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Financial_Year_Master" onclick="SetMenuInSession('Common')"><i class="fa fa-circle-o"></i>Financial Year</a></li>
+                                            }
+
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+
+                                }
+                                @if (((DataTable)Session["ModuleTable"]).Select("Module_ID = 37  OR Module_ID = 41  OR Module_ID = 42 OR Module_ID = 43 OR Module_ID = 44 OR Module_ID = 45 OR Module_ID = 46 OR Module_ID = 47 OR Module_ID = 48  OR Module_ID = 49 OR Module_ID = 50 OR Module_ID = 51 OR Module_ID = 52").Count() > 0)
+                                {
+                                    <li class="treeview" id="UseUpKeep">
+                                        <a href="#">
+                                            <i class="fa fa-list-ul"></i>UseUpKeep
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Category_Master' AND Module_ID = 42 ").Count() > 0)
+                                            {
+                                                <li><a href="index2.html" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> User Category</a></li>
+                                            }
+
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Category_Master' AND Module_ID = 43 ").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Category_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Category Master</a></li>
+                                            }
+
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Priority_Master' AND Module_ID = 44").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Priority_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Priority Master</a></li>
+                                            }
+
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'WeekllyOff_Master' AND Module_ID = 45").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/WeekllyOff_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> WeekllyOff Master</a></li>
+                                            }
+
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Request_Status_Master' AND Module_ID = 46").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Request_Status_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Request Status Master</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Module_Master' AND Module_ID = 47").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Module_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Module Master</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'IDProof_Master' AND Module_ID = 48").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/IDProof_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> IDProof Master</a></li>
+                                            }
+
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Holiday_Master' AND Module_ID = 49").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Holiday_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Holiday Master</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Location_Master' AND Module_ID = 37").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Location_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Location Master</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'User_Rights_Master' AND Module_ID = 50").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/User_Rights_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> User Rights Master</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Financial_Year_Master' AND Module_ID = 41").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Financial_Year_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Financial Year Master</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Bank_Master' AND Module_ID = 51").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Bank_Master" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i> Bank Master</a></li>
+                                            }
+                                            @if (((DataTable)Session["ModuleTable"]).Select("Module_Name = 'Employee_Leave' AND Module_ID = 52").Count() > 0)
+                                            {
+                                                <li><a href="~/Master/Employee_Leave" onclick="SetMenuInSession('UseUpKeep')"><i class="fa fa-circle-o"></i>Employee Leave</a></li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+
+                                }
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+
+                    }
+
+                </ul>
+            </section>
+        </aside>
+        <section class="content-wrapper">
+            <section class="content">
+                @RenderBody()
+            </section>
+            @*<hr />*@
+            @*<footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                </footer>*@
+        </section>
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0.0
+            </div>
+           @* <strong>UseUpkeep - A Product of <a href="http://techrhombus.com">TechRhombus</a>.</strong>*@
+            <div class="form-group col-md-4">
+                @*<label for="Party_Name">Item Name</label>*@
+                @*@Html.DropDownList("ddl_Company", (MultiSelectList)ViewBag.Company, "Please Select ...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Company" })*@
+            </div>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Home tab content -->
+                <div class="tab-pane" id="control-sidebar-home-tab">
+                    <h3 class="control-sidebar-heading">Recent Activity</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                                    <p>Will be 23 on April 24th</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-user bg-yellow"></i>
+
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+
+                                    <p>New phone +1(800)555-1234</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+
+                                    <p>nora@example.com</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <i class="menu-icon fa fa-file-code-o bg-green"></i>
+
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+
+                                    <p>Execution time 5 seconds</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+
+                    <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                    Custom Template Design
+                                    <span class="label label-danger pull-right">70%</span>
+                                </h4>
+
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                    Update Resume
+                                    <span class="label label-success pull-right">95%</span>
+                                </h4>
+
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                    Laravel Integration
+                                    <span class="label label-warning pull-right">50%</span>
+                                </h4>
+
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <h4 class="control-sidebar-subheading">
+                                    Back End Framework
+                                    <span class="label label-primary pull-right">68%</span>
+                                </h4>
+
+                                <div class="progress progress-xxs">
+                                    <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Settings tab content -->
+                <div class="tab-pane" id="control-sidebar-settings-tab">
+                    <form method="post">
+                        <h3 class="control-sidebar-heading">General Settings</h3>
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Report panel usage
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+
+                            <p>
+                                Some information about this general settings option
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Allow mail redirect
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+
+                            <p>
+                                Other sets of options are available
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Expose author name in posts
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+
+                            <p>
+                                Allow the user to show his name in blog posts
+                            </p>
+                        </div>
+                        <!-- /.form-group -->
+
+                        <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Show me as online
+                                <input type="checkbox" class="pull-right" checked>
+                            </label>
+                        </div>
+                        <!-- /.form-group -->
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Turn off notifications
+                                <input type="checkbox" class="pull-right">
+                            </label>
+                        </div>
+                        <!-- /.form-group -->
+
+                        <div class="form-group">
+                            <label class="control-sidebar-subheading">
+                                Delete chat history
+                                <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                            </label>
+                        </div>
+                        <!-- /.form-group -->
+                    </form>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+
+    </section>
+    <!-- jQuery 3 -->
+    @*<script src="~/bower_components/jquery/dist/jquery.min.js"></script>*@
+    <!-- Bootstrap 3.3.7 -->
+    @*<script src="~/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>*@
+    <!-- Select2 -->
+    <script src="~/bower_components/select2/dist/js/select2.full.min.js"></script>
+
+    @*<script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>*@
+    <script src="~/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #788fc4; z-index: 30001; cursor: wait; opacity: 0.7; display: none;">
+        @*<p style="position: absolute; top: 30%; left: 36%;">*@
+        @*<img src="~/Images/loader1.gif" />*@
+        <div class="lds-roller">
+            <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+        </div>
+
+        @*</p>*@
+    </div>
+    <script type="text/javascript">
+        function show_loader() {
+            $("#divLoading").show();
+        }
+        function hide_loader() {
+            $("#divLoading").hide();
+        }
+        //$(function () {
+        //    $('[data-mask]').inputmask()
+        //});
+        //$(function () {
+        //    const Toast = Swal.mixin({
+        //        toast: true,
+        //        position: 'top-end',
+        //        showConfirmButton: false,
+        //        timer: 3000
+        //    });
+        //});
+
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+        //Timepicker
+        $('.timepicker').timepicker({
+            showInputs: false
+        });
+
+        $('.select2').select2();
+                    //$('[data-toggle="tooltip"]').tooltip();
+
+                    //$(function () {
+                    //    $("[rel='tooltip']").tooltip();
+                    //});
+
+        function SetMenuInSession(MenuName)
+        {
+
+
+
+            $.ajax({
+                url: "/Home/SetSession",
+                method: 'POST',
+                datatype: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+
+
+                    sessionval: MenuName
+
+                }),
+
+                success: function (json) {
+                },
+
+                error: function (json) {
+
+                    bootbox.alert("Error " + json)
+                }
+            });
+
+
+        }
+
+        $(document).ready(function () {
+
+
+            //alert(@Session["ActiveMenu"]);
+
+            if ('@Session["ActiveMenu"]' == 'UseUpKeep' ) {
+
+                $('#masters').addClass('active treeview menu-open');
+                $('#UseUpKeep').addClass('active treeview menu-open');
+            }
+            else if ('@Session["ActiveMenu"]' == 'Common') {
+                $('#masters').addClass('active treeview menu-open');
+                $('#common').addClass('active treeview menu-open');
+
+            }
+            else if ('@Session["ActiveMenu"]' == 'Billing') {
+                $('#masters').addClass('active treeview menu-open');
+                $('#billing').addClass('active treeview menu-open');
+
+            }
+            else if ('@Session["ActiveMenu"]' == 'Dashboard') {
+
+                $('#dashboard').addClass('active treeview menu-open');
+
+            }
+            else if ('@Session["ActiveMenu"]' == 'billing') {
+
+                $('#Billing').addClass('active treeview menu-open');
+
+            }
+            else if ('@Session["ActiveMenu"]' == 'Master') {
+                $('#tasks').addClass('active treeview menu-open');
+                $('#Masters').addClass('active treeview menu-open');
+
+
+            }
+            else if ('@Session["ActiveMenu"]' == 'Tasks') {
+                $('#tasks').addClass('active treeview menu-open');
+                $('#assigntasks').addClass('active treeview menu-open');
+            }
+            else if ('@Session["ActiveMenu"]' == 'Reports') {
+                $('#reports').addClass('active treeview menu-open');
+
+            }
+
+            else if ('@Session["ActiveMenu"]' == 'Sales') {
+                $('#reports').addClass('active treeview menu-open');
+                $('#sales').addClass('active treeview menu-open');
+
+            }
+
+            else if ('@Session["ActiveMenu"]' == 'Estimate') {
+                $('#reports').addClass('active treeview menu-open');
+                $('#Estimate').addClass('active treeview menu-open');
+
+            }
+            else if ('@Session["ActiveMenu"]' == 'Purchase') {
+                $('#reports').addClass('active treeview menu-open');
+                $('#Purchase').addClass('active treeview menu-open');
+
+            }
+            else if ('@Session["ActiveMenu"]' == 'Stock') {
+                $('#reports').addClass('active treeview menu-open');
+                $('#Stock').addClass('active treeview menu-open');
+
+            }
+
+        });
+    </script>
+
+</body>
+
+
+</html>

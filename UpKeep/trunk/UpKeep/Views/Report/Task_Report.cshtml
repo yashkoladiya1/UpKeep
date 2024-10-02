@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "Task_Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Task Report</h3>
+                </div>
+                <form role="form">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="ddlUser">Assign To</label>
+                                    @*<select class="form-control select2" id="ddlUser"></select>*@
+                                    @Html.DropDownList("ddlUser", (MultiSelectList)ViewBag.UserList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddlUser" })
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="txtFromDate">From Date</label>
+                                    <input type="date" id="txtFromDate" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <div class="form-group">
+                                    <label for="txtToDate">To Date</label>
+                                    <input type="date" id="txtToDate" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3">
+                                <button type="button" class="btn btn-primary" onclick="display();">GetData</button>
+                            </div>
+                        </div>&nbsp;&nbsp;&nbsp;
+                        <div class="card-body">
+                            <div class="col-12" style="overflow: auto;">
+                                <table id="tblTaskReport" class="table table-bordered table-striped" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th hidden>Task ID</th>
+                                            <th>Transaction ID</th>
+                                            <th hidden>User Name</th>
+                                            <th>Assign From</th>
+                                            <th>Main</th>
+                                            <th>Sub</th>
+                                            <th>Module</th>
+                                            <th>Task Name</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Given By</th>
+                                            <th>Priority</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Minutes Spend</th>
+                                            <th>ExpCompletion Minutes</th>
+                                            <th>EmpExpected Minutes</th>
+                                            <th>Tested</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    $(document).ready(function () {
+        @* alert("@UpKeep.Utility.SessionDetails.UserSession.UserName");*@
+        if (@UpKeep.Utility.SessionDetails.UserSession.Login_ID != 1) {
+            @*alert(@ViewBag.UserList.Items[0].Login_ID);*@
+            @*setTimeout(function () {
+                $("#ddlUser").val("@ViewBag.UserList.Items[0].Login_ID").trigger('change');
+            }, 1500);*@
+            $("#ddlUser").val("@ViewBag.UserList.Items[0].Login_ID").trigger('change');
+            $("#ddlUser").attr("disabled", "disabled");
+        }
+    });
+
+    async function display()
+    {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Get_Task_Report")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            data: JSON.stringify({
+                Login_ID: $('#ddlUser').val() == "" ? 0 : $('#ddlUser').val(),
+                from_date: $('#txtFromDate').val() == "" ? null : $('#txtFromDate').val(),
+                to_date: $('#txtToDate').val() == "" ? null : $('#txtToDate').val(),
+            }),
+            success: function (json) {
+                if(json) {
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value)
+                    {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value)
+                        {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+                        i++;
+                    });
+
+                    var oTable = $('#tblTaskReport').DataTable({
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        "bSort": true,
+                        "aaData": rowDataSet,
+                        "bDestroy": true,
+                        "columns": [
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    return '<label>'+ "@UpKeep.Utility.SessionDetails.UserSession.UserName" +'</label>'
+                                }
+                            },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    return '<img src="/Clients/localhost/Users/' + row[10] + '.jpg" alt="user image" style="height:30px;width:30px;" class="img-circle">'
+                                }
+                            },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    if (row[17] == "0") {
+                                        return '<a href="#" onclick="updateTestFlag(' + row[0] + ',1)"><i class="fa fa-star-o text-yellow"></i></a>'
+                                    }
+                                    else if (row[17] == "1") {
+                                        return '<a href="#" onclick="updateTestFlag(' + row[0] + ',0)"><i class="fa fa-star text-yellow"></i></a>'
+                                    }
+                                }
+                            }
+                        ],
+                        "columnDefs": [
+                            { "targets": [0], "visible": false },
+                            { "targets": [2], "visible": false }
+                        ]
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+
+    function updateTestFlag(Taskid, flag) {
+        $.ajax({
+            url: '@Url.Action("UpdateTestFlag", "Home")',
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                Task_ID: Taskid,
+                Tested: flag
+            }),
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            if (data.success) {
+                display();
+            }
+        });
+    }
+
+
+</script>

@@ -1,0 +1,306 @@
+﻿
+@{
+    ViewBag.Title = "Employee_Leave";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Employee_Leave</h2>*@
+
+<section class="content-header">
+    <h1>Employee Leave</h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Master</a></li>
+        <li><a href="#">Employee Leave</a></li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Employee Leave</h3>
+                </div>
+                <form role="form">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="ddlUser">User</label>
+                                @*<select class="form-control select2" id="ddlUser"></select>*@
+                                @Html.DropDownList("ddlUser", (MultiSelectList)ViewBag.UserList,  new { @class = "form-control select2 formrequired", @placeholder = "Display Name", @id = "ddlUser" })    @*, @onchange = "display();"*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="txtFromDate">From Date</label>
+                                <input type="date" id="txtFromDate" class="form-control formrequired" onchange="CheckFromDate();">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="txtToDate">To Date</label>
+                                <input type="date" id="txtToDate" class="form-control formrequired" onchange="checkToDate();">
+                            </div>
+                        </div>
+                        @*<div class="form-group col-sm-3">
+                            <div class="form-group">
+                                <label for="txtLeaveDate">Leave Date</label>
+                                <input type="date" id="txtLeaveDate" class="form-control">
+                            </div>
+                        </div>*@
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="txtLeaveReason">Leave Reason</label>
+                                <input type="text" id="txtLeaveReason" placeholder="Enter Leave Reason" class="form-control formrequired" onchange="checkLeaveReason();">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtLeaveType">Leave Type</label>
+                            <select id="txtLeaveType" class="form-control select2 formrequired">
+                                <option value="0">Please Select...</option>
+                                <option value="h">Half Day</option>
+                                <option value="f">Full Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        @*<input type="submit" value="Save" id="Save_EmployeeLeave" class="btn btn-primary swalDefaultSuccess" />*@
+                        <button type="button" id="Save_EmployeeLeave" class="btn btn-primary">Save</button>
+                        <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                        @*<input type="button" value="get" id="get" class="btn btn-primary swalDefaultSuccess" onclick="display();"/>*@
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Employee Leave</h3>
+                </div>
+                <div class="box-body">
+                    <div class="col-12">  @*style="overflow: auto;"*@
+                        <table id="tblEmployeeLeave" class="table table-bordered table-striped" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Employee Leave Id</th>
+                                    <th>User ID</th>
+                                    <th>User Name</th>
+                                    <th>Leave Date</th>
+                                    <th>Leave Reason</th>
+                                    <th>Leave Type</th>
+                                    <th>Active</th>
+                                    <th>Add By</th>
+                                    <th>Edit By</th>
+                                    <th>Add Date</th>
+                                    <th>Edit Date</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    
+    $(document).ready(function () {
+        $('#Save_EmployeeLeave').click(function () {
+            var isValid = true;
+            $('.formrequired').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red",
+                        "background": "#FFCECE"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                        "background": ""
+                    });
+                }
+            });
+            if (isValid) {
+                var alertmsg;
+                var start = $('#txtFromDate').val();
+                var end = $('#txtToDate').val();
+                //const date1 = new Date(start);
+                //const date2 = new Date(end);
+                let date1 = new Date(start);
+                let date2 = new Date(end);
+                //const diffTime = Math.abs(date2 - date1);
+                //const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                //console.log(diffTime + " milliseconds");
+                //console.log(diffDays + " days");
+                //alert(diffDays);
+                //alert(date1);
+                while (date1 <= date2) {
+                    //console.log(date1);
+                    //if (start == end) {
+                    //    let newDate = date1.setDate(date1.getDate());
+                    //    date1 = new Date(newDate);
+                    //}
+                    //else {
+                    //    let newDate = date1.setDate(date1.getDate() + 1);
+                    //    date1 = new Date(newDate);
+                    //}
+                    //alert(date1);
+                    //for (var i = start; i <= end; i++) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Save_Employee_Leave")',
+                        traditional: true,
+                        contentType: 'application/json; charset=utf-8',
+                        async: false,
+                        data: JSON.stringify({
+                            User_Id: $('#ddlUser').val(),
+                            //Leave_Date: $('#txtLeaveDate').val(),
+                            Leave_Date: date1,  //"",  //$('#txtFromDate').val(), //$('#txtToDate').val(),
+                            Leave_Reason: $('#txtLeaveReason').val(),
+                            Leave_Type: $('#txtLeaveType').val()
+                        }),
+                        success: function (json) {
+                            if (json.success) {
+                                alertmsg = json.msg;
+                                //alert("Save Succesfuly!!!");
+                                //bootbox.alert(json.msg);
+                                //location.reload();
+                            } else {
+                                alertmsg = json.msg;
+                            }
+                        },
+                        error: function (json) { alert("Error :" + json.msg) }
+                    });
+                    //}
+                    date1.setDate(date1.getDate() + 1);
+                }
+                bootbox.alert(alertmsg);
+                Clear();
+                display();
+            }
+        });
+    });
+    
+    async function display()
+    {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Get_Employee_Leave")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            data: JSON.stringify({
+                //User_Id: $('#ddlUser').val()
+                //User_Id: $('#ddlUser').val() == '' ? 0 : $('#ddlUser').val()   @*@SessionDetails.UserSession.Login_ID*@
+            }),
+            success: function (json) {
+                if(json) {
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value)
+                    {
+                        var rowData = [];
+                        var j = 0;
+                        $.each(json.List[i], function (key, value)
+                        {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+                        i++;
+                    });
+                    var oTable = $('#tblEmployeeLeave').DataTable({
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        "bSort": true,
+                        "aaData": rowDataSet,
+                        "bDestroy": true,
+                        "columns": [
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" },
+                            { "sWidth": "1%" }
+                        ],
+                        "columnDefs": [
+                            { "targets": [0],"visible": false },
+                            { "targets": [1],"visible": false },
+                            { "targets": [6],"visible": false },
+                            { "targets": [7],"visible": false },
+                            { "targets": [8],"visible": false },
+                            { "targets": [9],"visible": false },
+                            { "targets": [10],"visible": false }
+                        ]
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    }
+
+    function Clear() {
+        $("#ddlUser").val("").trigger("change");
+        $("#txtFromDate").val("");
+        $("#txtToDate").val("");
+        $("#txtLeaveReason").val("");
+        $("#txtLeaveType").val("").trigger("change");
+    }
+
+    function datevalidation() {
+        var start = $('#txtFromDate').val();
+        var end = $('#txtToDate').val();
+        let date1 = new Date(start);
+        let date2 = new Date(end);
+        if (date1 > date2) {
+            alert('End date should be greater than Start date!!.');
+            $('#txtToDate').val("");
+        }
+    }
+
+    display();
+
+    function CheckFromDate() {
+        var taskname = $('#txtFromDate').val();
+        if (taskname != null || taskname != "") {
+            $('#txtFromDate').css("background-color", "");
+            $('#txtFromDate').css("border", "");
+
+        }
+    }
+    function checkToDate() {
+        var start = $('#txtFromDate').val();
+        var end = $('#txtToDate').val();
+        let date1 = new Date(start);
+        let date2 = new Date(end);
+        if (date1 > date2) {
+            alert('End date should be greater than Start date!!.');
+            $('#txtToDate').val("");
+        }
+        var FromTime = $('#txtToDate').val();
+        if (FromTime != null || FromTime != "") {
+            $('#txtToDate').css("background-color", "");
+            $('#txtToDate').css("border", "");
+
+        }
+    }
+    function checkLeaveReason() {
+        var ToTime = $('#txtLeaveReason').val();
+        if (ToTime != null || ToTime != "") {
+            $('#txtLeaveReason').css("background-color", "");
+            $('#txtLeaveReason').css("border", "");
+
+        }
+    }
+</script>

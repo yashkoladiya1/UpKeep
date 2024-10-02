@@ -1,0 +1,6 @@
+﻿2019-11-14:P:Database:Create Table Cheque_Print, Create Procedure Cheque_Print_SAVE,Create Procedure Cheque_Print_GetData, create Table Bank_Master, Create Procedure Bank_Master_SAVE, Create Procedure Bank_Master_GetData
+2019-11-15:M:Database: City_Master_Search_GetData  : Globle
+2019-11-15:M:Form:G:\My Project\UpKeep\trunk\UpKeep\Views\Master : Take letest All Form
+2019-11-15:M:Country Master Issue
+2019-11-21:M:DLL--> SProc
+

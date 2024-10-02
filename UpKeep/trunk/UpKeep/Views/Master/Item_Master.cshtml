@@ -1,0 +1,503 @@
+﻿
+@{
+    ViewBag.Title = "Item_Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<section class="content">
+    <div class="row">
+        <!-- left column --> 
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Item Master</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form">
+                    <div class="box-body">
+                        <div class="Item_Code">
+                            <label for="Item_Group_Code">Item ID</label>
+                            <input type="text" class="form-control" disabled="disabled" id="Item_Code" placeholder="ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="Company_Code">Company</label>
+                            @*<input type="text" class="form-control" id="Company_Code" placeholder="ID">*@
+                            @Html.DropDownList("ddl_Company_Code", (MultiSelectList)ViewBag.FormDisplayNameList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Company_Code" })
+                                               
+                        </div>
+                        <div class="form-group">
+                            <label for="Branch_Code">Branch</label>
+                            @*<input type="text" class="form-control" id="Branch_Code" placeholder="ID">*@
+                            @Html.DropDownList("ddl_Branch_Code", (MultiSelectList)ViewBag.FormBranchList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Branch_Code" })
+
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Location_Code">Location</label>
+                            @*<input type="text" class="form-control" id="Location_Code" placeholder="ID">*@
+                            @Html.DropDownList("ddl_Location_Code", (MultiSelectList)ViewBag.FormLocationList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Location_Code" })
+
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Item_Name">Item Name</label>
+                            <input type="text" class="form-control formrequired" id="Item_Name" placeholder="Name" autofocus="autofocus" oninput="chechvalidation();">
+                        </div>
+                        <div class="form-group">
+                            <label for="Item_Shortname">Item Shortname</label>
+                            <input type="text" class="form-control formrequired" id="Item_Shortname" placeholder="Name" autofocus="autofocus" oninput="chechshorname();">
+                        </div>
+                        <div class="form-group">
+                            <label for="Item_Group_Code">Item Group</label>
+                            @*<input type="text" class="form-control" id="Item_Group_Code" placeholder="ID" autofocus="autofocus">*@
+                            @Html.DropDownList("ddl_Item_Group_Code", (MultiSelectList)ViewBag.FormGroupCodeList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Item_Group_Code" })
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="Item_Category_Code">Item Category</label>
+                            @*<input type="text" class="form-control" id="Item_Category_Code" placeholder="ID" autofocus="autofocus">*@
+                            @Html.DropDownList("ddl_Item_Category_Code", (MultiSelectList)ViewBag.FormCategoryCodeList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Item_Category_Code" })
+                            
+                        </div>
+                      
+                        <div class="form-group">
+                            <label for="HolidayStatus">Active</label>
+                            <input checked="checked" id="Active" name="Status" type="radio" value="Active" style="width:35px;" />Active
+                            <input id="DeActive" name="Status" type="radio" value="DeActive" style="width:35px;" /> DeActive
+                        </div>
+                        <div class="form-group">
+                            <label for="Remark">Remark</label>
+                            <input type="text" class="form-control" id="Remark" placeholder="Remark">
+                        </div>
+                        <div class="form-group">
+                            <label for="Reorder_Level">Reorder Level</label>
+                            <input type="text" class="form-control" id="Reorder_Level" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Unit_Name">Unit Name</label>
+                            @*<input type="text" class="form-control" id="Unit_Name" placeholder="Name" autofocus="autofocus">*@
+                            @Html.DropDownList("ddl_Unit_Name", (MultiSelectList)ViewBag.FormUnitList, "Please Select...", new { @class = "form-control formrequired", @placeholder = "Display Name", @id = "ddl_Unit_Name" , @oninput = "unitnamne();" })
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="Last_Purchase_Rate">Last Purchase Rate</label>
+                            <input type="text" class="form-control" id="Last_Purchase_Rate" placeholder="Rate" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Item_Codification">Item Codification</label>
+                            <input type="text" class="form-control" id="Item_Codification" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Disc_Per">Disc Per</label>
+                            <input type="text" class="form-control" id="Disc_Per" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Hsn_ID">Hsn ID</label>
+                            @*<input type="text" class="form-control" id="Hsn_ID" placeholder="ID" autofocus="autofocus">*@
+                            @Html.DropDownList("ddl_Hsn", (MultiSelectList)ViewBag.HSNList, "Please Select...", new { @class = "form-control select2", @placeholder = "Display Name", @id = "ddl_Hsn" })
+                        </div>
+                        <div class="form-group">
+                            <label for="Sale_Rate">Sale Rate</label>
+                            <input type="text" class="form-control" id="Sale_Rate" placeholder="Rate" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Stock_Limit">Stock Limit</label>
+                            <input type="text" class="form-control" id="Stock_Limit" autofocus="autofocus">
+                        </div>
+                        <div class="form-group">
+                            <label for="Pcs_In_Box">Pcs In Box</label>
+                            <input type="text" class="form-control" id="Pcs_In_Box" placeholder="Rate" autofocus="autofocus">
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="btnSave" class="btn btn-primary" onclick="SaveForm()">Save</button>
+                        <button type="button" id="btnClear" class="btn btn-primary" value="Clear" onclick="Clear()">Clear</button>
+                        <button type="button" id="btnDelete" class="btn btn-primary" onclick="Delete()">Delete</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Item List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div style="width:90%; margin:0 auto;">
+                        <input id="txtSearch" placeholder="General search" class="form-control" />
+                        <div id="gridboxmap1" class="box-body table-responsive no-padding">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        show_loader();
+        display();
+        hide_loader();
+    });
+
+    //$('#demoGrid').DataTable({
+    //});
+
+    function Clear() {
+        $("#Item_Code").val("");
+        $("#ddl_Company_Code").val("").trigger("change");
+        $("#ddl_Branch_Code").val("").trigger("change");
+        $("#ddl_Location_Code").val("").trigger("change");
+        $("#Item_Name").val("");
+        $("#Item_Shortname").val("");
+        $("#ddl_Item_Group_Code").val("").trigger("change");
+        $("#ddl_Item_Category_Code").val("").trigger("change");
+        $("#Active").prop("checked", true);
+        $("#DeActive").prop("checked", false);
+        $("#Remark").val("");
+        $("#Reorder_Level").val("");
+        $("#ddl_Unit_Name").val("").trigger("change");
+        $("#Last_Purchase_Rate").val("");
+        $("#Item_Codification").val("");
+        $("#Disc_Per").val("");
+        $("#ddl_Hsn").val("").trigger("change");
+        $("#Sale_Rate").val("");
+        $("#Stock_Limit").val("");
+        $("#Pcs_In_Box").val("");
+        $("#btnSave").text('Save');
+        $("#btnSave").attr('class', 'btn btn-primary');
+        document.getElementById('Item_Name').focus();
+    }
+
+    function GetFormDetails(Item_Code, Company_Code, Company_Name, Branch_Code, Branch_Name, Location_Code, Location_Name, Item_Name, Item_Shortname, Item_Group_Code,
+        Item_Group_Name, Item_Category_Code, Item_Category_Name,
+        Active, Remark, Reorder_Level, Unit_Name, Last_Purchase_Rate, Item_Codification, Disc_Per, Hsn_ID, Sale_Rate, Stock_Limit, Pcs_In_Box) {
+        $("#Item_Code").val(Item_Code);
+        $("#ddl_Company_Code").val(Company_Code).trigger("change");
+        $("#ddl_Branch_Code").val(Branch_Code).trigger("change");
+        $("#ddl_Location_Code").val(Location_Code).trigger("change");
+        $("#Item_Name").val(Item_Name);
+        $("#Item_Shortname").val(Item_Shortname);
+        $("#ddl_Item_Group_Code").val(Item_Group_Code).trigger("change");
+        $("#ddl_Item_Category_Code").val(Item_Category_Code).trigger("change");
+        $("#Active").prop("checked", Active == "1" ? true : false);
+        $("#DeActive").prop("checked", Active == "0" ? true : false);
+        $("#Remark").val(Remark);
+        $("#Reorder_Level").val(Reorder_Level);
+        $("#ddl_Unit_Name").val(Unit_Name).trigger("change");
+        $("#Last_Purchase_Rate").val(Last_Purchase_Rate);
+        $("#Item_Codification").val(Item_Codification);
+        $("#Disc_Per").val(Disc_Per);
+        $("#ddl_Hsn").val(Hsn_ID).trigger("change");
+        $("#Sale_Rate").val(Sale_Rate);
+        $("#Stock_Limit").val(Stock_Limit);
+        $("#Pcs_In_Box").val(Pcs_In_Box);
+        $("#btnSave").text('Update');
+        $("#btnSave").attr('class', 'btn btn-warning');
+        document.getElementById('Item_Name').focus();
+    }
+
+    function SaveForm() {
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("Item_SaveForm", "Master")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    Item_Code: $("#Item_Code").val(), Company_Code: $("#ddl_Company_Code").val(),
+                    Branch_Code: $("#ddl_Branch_Code").val(), Location_Code: $("#ddl_Location_Code").val(),
+                    Item_Name: $("#Item_Name").val(), Item_Shortname: $("#Item_Shortname").val(),
+                    Item_Group_Code: $("#ddl_Item_Group_Code").val(), Item_Category_Code: $("#ddl_Item_Category_Code").val(),
+                    Active: $("#Active").prop("checked"), Remark: $("#Remark").val(),
+                    Reorder_Level: $("#Reorder_Level").val(), Unit_Code: $("#ddl_Unit_Name").val(),
+                    Last_Purchase_Rate: $("#Last_Purchase_Rate").val(), Item_Codification: $("#Item_Codification").val(),
+                    Disc_Per: $("#Disc_Per").val(), Hsn_ID: $("#ddl_Hsn").val(),
+                    Sale_Rate: $("#Sale_Rate").val(), Stock_Limit: $("#Stock_Limit").val(),
+                    Pcs_In_Box: $("#Pcs_In_Box").val()
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    Clear();
+                    display();
+                }
+                bootbox.alert(data.message);
+            });
+        }
+    }
+
+   
+
+
+    function display() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetItem_Master_List")',
+            traditional: true,
+            contentType: 'application/json; charset=utf-8',
+            success: function (json) {
+                if (json) {
+                    var tableHeaders = '';
+                    var dynamicColumns = [];
+                    var i = 0;
+                    //var v = JSON(data)
+
+                    tableHeaders += "<th>Edit</th>";
+                    var obj = { sTitle: "Select", orderable: false };
+                    dynamicColumns[i] = obj;
+                    i++;
+
+                    $.each(json.List[0], function (key, value) {
+                        tableHeaders += "<th>" + key + "</th>";
+
+                        var obj = { sTitle: key, orderable: false };
+
+                        dynamicColumns[i] = obj;
+                        i++;
+                    });
+
+                    $("#gridboxmap1").empty();
+                    $("#gridboxmap1").append('<table id="tblExcelImport_Item" cellspacing="0" cellpadding="0" style="width: 100%; margin-bottom: 5px;white-space: nowrap;" class="table-bordered table-condensed table-striped grid"><thead class="uppercase"><tr>' + tableHeaders + '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+
+
+                    //fetch all records from JSON result and make row data set.
+                    var rowDataSet = [];
+                    var i = 0;
+                    $.each(json.List, function (key, value) {
+                        var rowData = [];
+                        var j = 1;
+                        $.each(json.List[i], function (key, value) {
+                            rowData[j] = value;
+                            j++;
+                        });
+                        rowDataSet[i] = rowData;
+
+                        i++;
+                    });
+                    var oTable = $('#tblExcelImport_Item').dataTable({
+                        "bDestroy": true,
+                        //"bFilter": false,
+                        "serverSide": false,
+                        "bInfo": true,
+                        "bAutoWidth": false,
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        //"fnPreDrawCallback": function () {
+                        //    show_loader();
+                        //},
+                        //"fnDrawCallback": function () {
+                        //    hide_loader();
+                        //},
+                        "bDestroy": true,
+                        "bSort": true,
+                        "sEmptyTable": "Loading data from server, Or Data Not Available...",
+                        "aaData": rowDataSet,
+                        //"aoColumns": dynamicColumns,
+                        "columns": [
+                            {
+                                "bSortable": false,
+                                "sWidth": "1%",
+                                "render": function (data, type, row, meta) {
+                                    return '<center><a href="javascript:void(0);" onclick="GetFormDetails(' + row[1] + ',' + row[2] + ',\'' + row[3] + '\',' + row[4] + ',  \'' + row[5] + '\',' + row[6] + ',\'' + row[7] + '\',\'' + row[8] + '\',\'' + row[9] + '\',' + row[10] + ',\'' + row[11] + '\',' + row[12] + ',\'' + row[13] + '\',\'' + row[14] + '\',\'' + row[15] + '\',\'' + row[16] + '\',' + row[17] + ',\'' + row[18] + '\',\'' + row[19] + '\',\'' + row[20] + '\',' + row[21] + ',' + row[22] + ',' + row[23] + ',' + row[24] + ',' + row[25] + ')" style="padding:5px;"><i class="fa fa-edit" style="color:#444;"></i></a></center>'
+                                }
+                            },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+                              { "sWidth": "1%" },
+
+
+                        ],
+                        "columnDefs": [
+           {
+               "targets": [1],
+               "visible": false
+           },
+                {
+                    "targets": [2],
+                    "visible": false
+                },
+                        {
+                            "targets": [4],
+                            "visible": false
+                        },
+                      {
+                          "targets": [6],
+                          "visible": false
+                      },
+                        {
+                            "targets": [10],
+                            "visible": false
+                        },
+                {
+                    "targets": [12],
+                    "visible": false
+                }
+                        ]
+                    });
+                    $('#tblExcelImport_Item_filter').hide();
+                    $('#txtSearch').on('keyup', function () {
+                        $('#tblExcelImport_Item')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                    $('#txtSearch').on('change', function () {
+                        $('#tblExcelImport_Item')
+                        .DataTable()
+                        .search($('#txtSearch').val(), false, true)
+                        .draw();
+                    });
+                }
+            },
+            error: function (json) { alert("Error " + json) }
+        });
+    };
+
+
+    function Delete() {
+        var isValid = true;
+        $('.formrequired').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red",
+                    "background": "#FFCECE"
+                });
+            }
+            else {
+                $(this).css({
+                    "border": "",
+                    "background": ""
+                });
+            }
+        });
+
+
+        if (isValid) {
+            $.ajax({
+                url: '@Url.Action("Item_DeleteForm", "Master")',
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify({
+                    Item_Code: $("#Item_Code").val()
+                }),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (data) {
+                if (data.success) {
+                    Clear();
+                    display();
+                }
+                bootbox.alert(data.message);
+            });
+        }
+    }
+
+    $(function () {
+        $("#Start_Date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+0",
+            dateFormat: 'dd-M-yy'
+        });
+    });
+
+    $(function () {
+        $("#End_Date").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+0",
+            dateFormat: 'dd-M-yy'
+        });
+
+    });
+
+    function chechvalidation() {
+       
+        var itemname = $('#Item_Name').val();
+       // var shortname = $('#Item_Shortname').val();
+       
+        if (itemname != "") {
+            $('#Item_Name').css("background-color", "");
+            $('#Item_Name').css("border", "");
+            return true;
+        }
+        //if (shortname != "") {
+        //    $('#Item_Name').css("background-color", "");
+        //    $('#Item_Name').css("border", "");
+        //    return true;
+        //}
+         
+    }
+    function chechshorname() {
+        var shortname = $('#Item_Shortname').val();
+        if (shortname != "") {
+            $('#Item_Shortname').css("background-color", "");
+            $('#Item_Shortname').css("border", "");
+          
+        }
+    }
+    function unitnamne() {
+        var unitnmae = $('#ddl_Unit_Name').val();
+        if (unitnmae != "") {
+            $('#ddl_Unit_Name').css("background-color", "");
+            $('#ddl_Unit_Name').css("border", "");
+         
+        }
+    }
+</script>
+
+
+
+
+
+

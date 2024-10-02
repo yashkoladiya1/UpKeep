@@ -1,0 +1,1398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://useupkeep.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://useupkeep.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://useupkeep.com/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getClientReference">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getClientReferenceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getClientReferenceResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getClientConnectionString">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getClientConnectionStringResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getClientConnectionStringResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getClientConnectionString_mobile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="mobile" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getClientConnectionString_mobileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getClientConnectionString_mobileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_Client_Module_Rights">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Client_ID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get_Client_Module_RightsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Get_Client_Module_RightsResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Country_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="Country_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Country_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Country_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="Country_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Country_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Country_Master_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Country_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Country_Name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Country_Master_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Country_Master_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="State_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="State_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="State_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="State_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="State_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="State_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="State_Master_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="State_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="State_Name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Country_Code" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="State_Master_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="State_Master_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IDProof_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="IDProof_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IDProof_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IDProof_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="IDProof_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IDProof_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IDProof_Master_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IDProof_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="IDProof_Name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IDProof_Master_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IDProof_Master_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Module_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="Module_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Module_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Module_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="Module_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Module_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Module_Master_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Module_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Module_Name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Module_Master_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Module_Master_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Client_Master_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="Client_Master_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Client_Master_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Client_Master_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="Client_Master_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Client_Master_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Client_Master_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Client_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Client_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Client_Address" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="City_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="State_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Country_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="PIN_No" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Mobile_No" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Phone" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Email_ID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Billing_Address" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Pan_No" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ID_Proff_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="ID_Proff_Detail" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Client_Master_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Client_Master_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="City_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="City_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="City_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="City_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="City_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="City_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="City_Master_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="City_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="City_Name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="City_Master_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="City_Master_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClientConfig_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="ClientConfig_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClientConfig_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClientConfig_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="ClientConfig_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ClientConfig_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClientConfig_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Config_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Config_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="User_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Is_Link_To_Exists" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="Web_service_IP" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="URL" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Android_App_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Android_App_URL" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Apple_App_Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Apple_App_URL" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Theme_Name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ClientConfig_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ClientConfig_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ModuleRights_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="ModuleRights_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ModuleRights_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ModuleRights_Search_GetData">
+        <s:complexType />
+      </s:element>
+      <s:element name="ModuleRights_Search_GetDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ModuleRights_Search_GetDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ModuleRights_Save">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Rights_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Module_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Client_ID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Module_Start_Date" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Module_End_Date" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Demo_Start_Date" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Demo_End_Date" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Alert_Days" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="Active" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Remark" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ModuleRights_SaveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ModuleRights_SaveResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Send_Email">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="To" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Subject" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Body" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cdt" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="privateKey" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Send_EmailResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Send_EmailResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="getClientReferenceSoapIn">
+    <wsdl:part name="parameters" element="tns:getClientReference" />
+  </wsdl:message>
+  <wsdl:message name="getClientReferenceSoapOut">
+    <wsdl:part name="parameters" element="tns:getClientReferenceResponse" />
+  </wsdl:message>
+  <wsdl:message name="getClientConnectionStringSoapIn">
+    <wsdl:part name="parameters" element="tns:getClientConnectionString" />
+  </wsdl:message>
+  <wsdl:message name="getClientConnectionStringSoapOut">
+    <wsdl:part name="parameters" element="tns:getClientConnectionStringResponse" />
+  </wsdl:message>
+  <wsdl:message name="getClientConnectionString_mobileSoapIn">
+    <wsdl:part name="parameters" element="tns:getClientConnectionString_mobile" />
+  </wsdl:message>
+  <wsdl:message name="getClientConnectionString_mobileSoapOut">
+    <wsdl:part name="parameters" element="tns:getClientConnectionString_mobileResponse" />
+  </wsdl:message>
+  <wsdl:message name="Get_Client_Module_RightsSoapIn">
+    <wsdl:part name="parameters" element="tns:Get_Client_Module_Rights" />
+  </wsdl:message>
+  <wsdl:message name="Get_Client_Module_RightsSoapOut">
+    <wsdl:part name="parameters" element="tns:Get_Client_Module_RightsResponse" />
+  </wsdl:message>
+  <wsdl:message name="Country_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:Country_GetData" />
+  </wsdl:message>
+  <wsdl:message name="Country_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:Country_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="Country_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:Country_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="Country_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:Country_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="Country_Master_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:Country_Master_Save" />
+  </wsdl:message>
+  <wsdl:message name="Country_Master_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:Country_Master_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="State_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:State_GetData" />
+  </wsdl:message>
+  <wsdl:message name="State_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:State_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="State_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:State_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="State_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:State_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="State_Master_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:State_Master_Save" />
+  </wsdl:message>
+  <wsdl:message name="State_Master_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:State_Master_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDProof_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:IDProof_GetData" />
+  </wsdl:message>
+  <wsdl:message name="IDProof_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:IDProof_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDProof_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:IDProof_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="IDProof_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:IDProof_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IDProof_Master_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:IDProof_Master_Save" />
+  </wsdl:message>
+  <wsdl:message name="IDProof_Master_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:IDProof_Master_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="Module_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:Module_GetData" />
+  </wsdl:message>
+  <wsdl:message name="Module_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:Module_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="Module_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:Module_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="Module_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:Module_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="Module_Master_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:Module_Master_Save" />
+  </wsdl:message>
+  <wsdl:message name="Module_Master_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:Module_Master_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="Client_Master_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:Client_Master_GetData" />
+  </wsdl:message>
+  <wsdl:message name="Client_Master_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:Client_Master_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="Client_Master_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:Client_Master_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="Client_Master_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:Client_Master_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="Client_Master_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:Client_Master_Save" />
+  </wsdl:message>
+  <wsdl:message name="Client_Master_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:Client_Master_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="City_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:City_GetData" />
+  </wsdl:message>
+  <wsdl:message name="City_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:City_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="City_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:City_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="City_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:City_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="City_Master_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:City_Master_Save" />
+  </wsdl:message>
+  <wsdl:message name="City_Master_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:City_Master_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClientConfig_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:ClientConfig_GetData" />
+  </wsdl:message>
+  <wsdl:message name="ClientConfig_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:ClientConfig_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClientConfig_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:ClientConfig_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="ClientConfig_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:ClientConfig_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ClientConfig_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:ClientConfig_Save" />
+  </wsdl:message>
+  <wsdl:message name="ClientConfig_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:ClientConfig_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="ModuleRights_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:ModuleRights_GetData" />
+  </wsdl:message>
+  <wsdl:message name="ModuleRights_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:ModuleRights_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ModuleRights_Search_GetDataSoapIn">
+    <wsdl:part name="parameters" element="tns:ModuleRights_Search_GetData" />
+  </wsdl:message>
+  <wsdl:message name="ModuleRights_Search_GetDataSoapOut">
+    <wsdl:part name="parameters" element="tns:ModuleRights_Search_GetDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ModuleRights_SaveSoapIn">
+    <wsdl:part name="parameters" element="tns:ModuleRights_Save" />
+  </wsdl:message>
+  <wsdl:message name="ModuleRights_SaveSoapOut">
+    <wsdl:part name="parameters" element="tns:ModuleRights_SaveResponse" />
+  </wsdl:message>
+  <wsdl:message name="Send_EmailSoapIn">
+    <wsdl:part name="parameters" element="tns:Send_Email" />
+  </wsdl:message>
+  <wsdl:message name="Send_EmailSoapOut">
+    <wsdl:part name="parameters" element="tns:Send_EmailResponse" />
+  </wsdl:message>
+  <wsdl:portType name="Master_ServiceSoap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getClientReference">
+      <wsdl:input message="tns:getClientReferenceSoapIn" />
+      <wsdl:output message="tns:getClientReferenceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getClientConnectionString">
+      <wsdl:input message="tns:getClientConnectionStringSoapIn" />
+      <wsdl:output message="tns:getClientConnectionStringSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getClientConnectionString_mobile">
+      <wsdl:input message="tns:getClientConnectionString_mobileSoapIn" />
+      <wsdl:output message="tns:getClientConnectionString_mobileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Get_Client_Module_Rights">
+      <wsdl:input message="tns:Get_Client_Module_RightsSoapIn" />
+      <wsdl:output message="tns:Get_Client_Module_RightsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Country_GetData">
+      <wsdl:input message="tns:Country_GetDataSoapIn" />
+      <wsdl:output message="tns:Country_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Country_Search_GetData">
+      <wsdl:input message="tns:Country_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:Country_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Country_Master_Save">
+      <wsdl:input message="tns:Country_Master_SaveSoapIn" />
+      <wsdl:output message="tns:Country_Master_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="State_GetData">
+      <wsdl:input message="tns:State_GetDataSoapIn" />
+      <wsdl:output message="tns:State_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="State_Search_GetData">
+      <wsdl:input message="tns:State_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:State_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="State_Master_Save">
+      <wsdl:input message="tns:State_Master_SaveSoapIn" />
+      <wsdl:output message="tns:State_Master_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_GetData">
+      <wsdl:input message="tns:IDProof_GetDataSoapIn" />
+      <wsdl:output message="tns:IDProof_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_Search_GetData">
+      <wsdl:input message="tns:IDProof_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:IDProof_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_Master_Save">
+      <wsdl:input message="tns:IDProof_Master_SaveSoapIn" />
+      <wsdl:output message="tns:IDProof_Master_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Module_GetData">
+      <wsdl:input message="tns:Module_GetDataSoapIn" />
+      <wsdl:output message="tns:Module_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Module_Search_GetData">
+      <wsdl:input message="tns:Module_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:Module_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Module_Master_Save">
+      <wsdl:input message="tns:Module_Master_SaveSoapIn" />
+      <wsdl:output message="tns:Module_Master_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_GetData">
+      <wsdl:input message="tns:Client_Master_GetDataSoapIn" />
+      <wsdl:output message="tns:Client_Master_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_Search_GetData">
+      <wsdl:input message="tns:Client_Master_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:Client_Master_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_Save">
+      <wsdl:input message="tns:Client_Master_SaveSoapIn" />
+      <wsdl:output message="tns:Client_Master_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="City_GetData">
+      <wsdl:input message="tns:City_GetDataSoapIn" />
+      <wsdl:output message="tns:City_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="City_Search_GetData">
+      <wsdl:input message="tns:City_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:City_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="City_Master_Save">
+      <wsdl:input message="tns:City_Master_SaveSoapIn" />
+      <wsdl:output message="tns:City_Master_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_GetData">
+      <wsdl:input message="tns:ClientConfig_GetDataSoapIn" />
+      <wsdl:output message="tns:ClientConfig_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_Search_GetData">
+      <wsdl:input message="tns:ClientConfig_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:ClientConfig_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_Save">
+      <wsdl:input message="tns:ClientConfig_SaveSoapIn" />
+      <wsdl:output message="tns:ClientConfig_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_GetData">
+      <wsdl:input message="tns:ModuleRights_GetDataSoapIn" />
+      <wsdl:output message="tns:ModuleRights_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_Search_GetData">
+      <wsdl:input message="tns:ModuleRights_Search_GetDataSoapIn" />
+      <wsdl:output message="tns:ModuleRights_Search_GetDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_Save">
+      <wsdl:input message="tns:ModuleRights_SaveSoapIn" />
+      <wsdl:output message="tns:ModuleRights_SaveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Send_Email">
+      <wsdl:input message="tns:Send_EmailSoapIn" />
+      <wsdl:output message="tns:Send_EmailSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Master_ServiceSoap" type="tns:Master_ServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://useupkeep.com/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getClientReference">
+      <soap:operation soapAction="http://useupkeep.com/getClientReference" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getClientConnectionString">
+      <soap:operation soapAction="http://useupkeep.com/getClientConnectionString" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getClientConnectionString_mobile">
+      <soap:operation soapAction="http://useupkeep.com/getClientConnectionString_mobile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_Client_Module_Rights">
+      <soap:operation soapAction="http://useupkeep.com/Get_Client_Module_Rights" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Country_GetData">
+      <soap:operation soapAction="http://useupkeep.com/Country_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Country_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/Country_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Country_Master_Save">
+      <soap:operation soapAction="http://useupkeep.com/Country_Master_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="State_GetData">
+      <soap:operation soapAction="http://useupkeep.com/State_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="State_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/State_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="State_Master_Save">
+      <soap:operation soapAction="http://useupkeep.com/State_Master_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_GetData">
+      <soap:operation soapAction="http://useupkeep.com/IDProof_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/IDProof_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_Master_Save">
+      <soap:operation soapAction="http://useupkeep.com/IDProof_Master_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Module_GetData">
+      <soap:operation soapAction="http://useupkeep.com/Module_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Module_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/Module_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Module_Master_Save">
+      <soap:operation soapAction="http://useupkeep.com/Module_Master_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_GetData">
+      <soap:operation soapAction="http://useupkeep.com/Client_Master_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/Client_Master_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_Save">
+      <soap:operation soapAction="http://useupkeep.com/Client_Master_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="City_GetData">
+      <soap:operation soapAction="http://useupkeep.com/City_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="City_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/City_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="City_Master_Save">
+      <soap:operation soapAction="http://useupkeep.com/City_Master_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_GetData">
+      <soap:operation soapAction="http://useupkeep.com/ClientConfig_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/ClientConfig_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_Save">
+      <soap:operation soapAction="http://useupkeep.com/ClientConfig_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_GetData">
+      <soap:operation soapAction="http://useupkeep.com/ModuleRights_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_Search_GetData">
+      <soap:operation soapAction="http://useupkeep.com/ModuleRights_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_Save">
+      <soap:operation soapAction="http://useupkeep.com/ModuleRights_Save" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Send_Email">
+      <soap:operation soapAction="http://useupkeep.com/Send_Email" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="Master_ServiceSoap12" type="tns:Master_ServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://useupkeep.com/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getClientReference">
+      <soap12:operation soapAction="http://useupkeep.com/getClientReference" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getClientConnectionString">
+      <soap12:operation soapAction="http://useupkeep.com/getClientConnectionString" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getClientConnectionString_mobile">
+      <soap12:operation soapAction="http://useupkeep.com/getClientConnectionString_mobile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get_Client_Module_Rights">
+      <soap12:operation soapAction="http://useupkeep.com/Get_Client_Module_Rights" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Country_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/Country_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Country_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/Country_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Country_Master_Save">
+      <soap12:operation soapAction="http://useupkeep.com/Country_Master_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="State_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/State_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="State_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/State_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="State_Master_Save">
+      <soap12:operation soapAction="http://useupkeep.com/State_Master_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/IDProof_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/IDProof_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IDProof_Master_Save">
+      <soap12:operation soapAction="http://useupkeep.com/IDProof_Master_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Module_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/Module_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Module_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/Module_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Module_Master_Save">
+      <soap12:operation soapAction="http://useupkeep.com/Module_Master_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/Client_Master_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/Client_Master_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Client_Master_Save">
+      <soap12:operation soapAction="http://useupkeep.com/Client_Master_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="City_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/City_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="City_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/City_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="City_Master_Save">
+      <soap12:operation soapAction="http://useupkeep.com/City_Master_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/ClientConfig_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/ClientConfig_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ClientConfig_Save">
+      <soap12:operation soapAction="http://useupkeep.com/ClientConfig_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/ModuleRights_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_Search_GetData">
+      <soap12:operation soapAction="http://useupkeep.com/ModuleRights_Search_GetData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModuleRights_Save">
+      <soap12:operation soapAction="http://useupkeep.com/ModuleRights_Save" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Send_Email">
+      <soap12:operation soapAction="http://useupkeep.com/Send_Email" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Master_Service">
+    <wsdl:port name="Master_ServiceSoap" binding="tns:Master_ServiceSoap">
+      <soap:address location="http://localhost:3000/Master_Service.asmx" />
+    </wsdl:port>
+    <wsdl:port name="Master_ServiceSoap12" binding="tns:Master_ServiceSoap12">
+      <soap12:address location="http://localhost:3000/Master_Service.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
